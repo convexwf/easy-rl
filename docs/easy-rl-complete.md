@@ -9,7 +9,7 @@ tags:
   - reinforcement-learning
   - tutorial
 published_at: 2020-07-02
-updated_at: 2025-12-30
+updated_at: 2026-09-11
 ---
 
 # EasyRL：强化学习完整教程
@@ -79,19 +79,19 @@ updated_at: 2025-12-30
 #### 1.1 强化学习概述
 **强化学习（reinforcement learning，RL）**讨论的问题是智能体（agent）怎么在复杂、不确定的环境（environment）中最大化它能获得的奖励。如图 1.1 所示，强化学习由两部分组成：智能体和环境。在强化学习过程中，智能体与环境一直在交互。智能体在环境中获取某个状态后，它会利用该状态输出一个动作 （action），这个动作也称为决策（decision）。然后这个动作会在环境中被执行，环境会根据智能体采取的动作，输出下一个状态以及当前这个动作带来的奖励。智能体的目的就是尽可能多地从环境中获取奖励。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.1.png"/>
-</div>
-<div align=center>图 1.1 强化学习示意</div>
+
+![1.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.1.png)
+
+图 1.1 强化学习示意
 
 ##### 1.1.1  强化学习与监督学习
 
 我们可以把强化学习与监督学习做一个对比。以图片分类为例，如图 1.2 所示，**监督学习（supervised learning）**假设我们有大量被标注的数据，比如汽车、飞机、椅子这些被标注的图片，这些图片都要满足独立同分布，即它们之间是没有关联关系的。假设我们训练一个分类器，比如神经网络。为了分辨输入的 图片中是汽车还是飞机，在训练过程中，需要把正确的标签信息传递给神经网络。 当神经网络做出错误的预测时，比如输入汽车的图片，它预测出来是飞机，我们就会直接告诉它，该预测是错误的，正确的标签应该是汽车。最后我们根据类似错误写出一个损失函数（loss function），通过反向传播（back propagation）来训练神经网络。
 
-<div align=center>
-<img width="650" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.2.png"/>
-</div>
-<div align=center>图 1.2 监督学习</div>
+
+![1.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.2.png)
+
+图 1.2 监督学习
 
 所以在监督学习过程中，有两个假设：
   * 输入的数据（标注的数据）都应是没有关联的。因为如果输入的数据有关联，学习器（learner）是不好学习的。
@@ -101,17 +101,17 @@ updated_at: 2025-12-30
 
 在强化学习中，监督学习的两个假设其实都不能得到满足。以雅达利（Atari） 游戏 Breakout 为例，如图 1.3 所示，这是一个打砖块的游戏，控制木板左右移动从而把球反弹到上面来消除砖块。在玩游戏的过程中，我们可以发现智能体得到的观测（observation）不是独立同分布的，上一帧与下一帧间其实有非常强的连续性。我们得到的数据是相关的时间序列数据，不满足独立同分布。另外，我们并没有立刻获得反馈，游戏没有告诉我们哪个动作是正确动作。比如现在把木板往右移，这只会使得球往上或者往左一点儿，我们并不会得到即时的反馈。因此，强化学习之所以困难，是因为智能体不能得到即时的反馈，然而我们依然希望智能体在这个环境中学习。
 
-<div align=center>
-<img width="350" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.3.png"/>
-</div>
-<div align=center>图 1.3 雅达利游戏Breakout</div>
+
+![1.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.3.png)
+
+图 1.3 雅达利游戏Breakout
 
 如图 1.4 所示，强化学习的训练数据就是一个玩游戏的过程。我们从第 1 步开始，采取一个动作，比如我们把木板往右移，接到球。第 2 步我们又做出动作，得到的训练数据是一个玩游戏的序列。比如现在是在第 3 步，我们把这个序列放进网络，希望网络可以输出一个动作，即在当前的状态应该输出往右移或 者往左移。这里有个问题，我们没有标签来说明现在这个动作是正确还是错误的，必须等到游戏结束才可能知道，这个游戏可能 10s 后才结束。现在这个动作到底对最后游戏是否能赢有无帮助，我们其实是不清楚的。这里我们就面临**延迟奖励（delayed reward）**的问题，延迟奖励使得训练网络非常困难。
 
-<div align=center>
-<img width="500" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.4.png"/>
-</div>
-<div align=center>图 1.4 强化学习：玩Breakout</div>
+
+![1.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.4.png)
+
+图 1.4 强化学习：玩Breakout
 
 强化学习和监督学习的区别如下。 
 
@@ -147,24 +147,24 @@ updated_at: 2025-12-30
 
 图 1.5 所示为强化学习的一个经典例子，即雅达利的 Pong 游戏。游戏中右边的选手把球拍到左边， 然后左边的选手需要把球拍到右边。训练好的强化学习智能体和正常的选手有区别：强化学习的智能体会一直做无意义的振动，而正常的选手不会做出这样的动作。
 
-<div align=center>
-<img width="350" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.9.png"/>
-</div>
-<div align=center>图 1.5 Pong游戏</div>
+
+![1.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.9.png)
+
+图 1.5 Pong游戏
 
 在 Pong 游戏里面，其实只有两个动作：往上或者往下。如图 1.6 所示，如果强化学习通过学习一个策略网络来进行分类，那么策略网络会输入当前帧的图片，输出所有决策的可能性，比如往上移动的概率。
 
-<div align=center>
-<img width="450" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.10.png"/>
-</div>
-<div align=center>图 1.6 强化学习玩 Pong</div>
+
+![1.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.10.png)
+
+图 1.6 强化学习玩 Pong
 
 如图 1.7 所示，对于监督学习，我们可以直接告诉智能体正确动作的标签是什么。但在 Pong 游戏中， 我们并不知道它的正确动作的标签是什么。
 
-<div align=center>
-<img width="500" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.11.png"/>
-</div>
-<div align=center>图 1.7 监督学习玩 Pong</div>
+
+![1.11](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.11.png)
+
+图 1.7 监督学习玩 Pong
 
 在强化学习里面，我们让智能体尝试玩 Pong 游戏，对动作进行采样，直到游戏结束，然后对每个动作进行惩罚。图 1.8 所示为预演（rollout）的一个过程。预演是指我们从当前帧对动作进行采样，生成很多局游戏。我们将当前的智能体与环境交互，会得到一系列观测。每一个观测可看成一个轨迹（trajectory）。 轨迹就是当前帧以及它采取的策略，即状态和动作的序列：
 $$
@@ -172,10 +172,10 @@ $$
 $$
 最后结束时，我们会知道到底有没有把这个球拍到对方区域，对方有没有接住，我们是赢了还是输了。我们可以通过观测序列以及最终奖励（eventual reward）来训练智能体，使它尽可能地采取可以获得最终奖励的动作。一场游戏称为一个**回合（episode）**或者**试验（trial）**。
 
-<div align=center>
-<img width="500" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.13.png"/>
-</div>
-<div align=center>图 1.8 可能的预演序列</div>
+
+![1.13](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.13.png)
+
+图 1.8 可能的预演序列
 
 ##### 1.1.3 强化学习的历史
 
@@ -188,16 +188,16 @@ $$
 （2）提取这些特征后，我们再单独训练一个分类器。这个分类器可以是支持向量机（support vector machine，SVM）或 Boosting，然后就可以辨别这张图片是狗还是猫。
 
 
-<div align=center>
-<img width="500" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.14a.png"/>
-</div>
-<div align=center>（a）传统的计算机视觉 </div>
-<div align=center>
-<img width="500" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.14b.png"/>
-</div>
-<div align=center>（b）深度计算机视觉</div>
 
-<div align=center>图 1.9 传统的计算机视觉与深度计算机视觉的区别</div>
+![1.14a](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.14a.png)
+
+（a）传统的计算机视觉 
+
+![1.14b](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.14b.png)
+
+（b）深度计算机视觉
+
+图 1.9 传统的计算机视觉与深度计算机视觉的区别
 
 2012年，Krizhevsky等人提出了AlexNet，AlexNet在ImageNet分类比赛中取得冠军，迅速引起了人们对于卷积神经网络的广泛关注。
 大家就把特征提取以及分类两者合到一块儿去了，就是训练一个神经网络。这个神经网络既可以做特征提取，也可以做分类，它可以实现端到端训练，如图 1.9b 所示，它的参数可以在每一个阶段都得到极大的优化，这是一个非常重要的突破。
@@ -208,15 +208,15 @@ $$
 
 * 深度强化学习：自从我们有了深度学习，有了神经网络，就可以把智能体玩游戏的过程改进成一个端到端训练（end-to-end training）的过程，如图 1.10b 所示。我们不需要设计特征，直接输入状态就可以输出动作。我们可以用一个神经网络来拟合价值函数或策略网络，省去特征工程（feature engineering）的过程。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.15a.png"/>
-</div>
-<div align=center>（a）标准强化学习</div>
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.15b.png"/>
-</div>
-<div align=center>（b）深度强化学习</div>
-<div align=center>图 1.10 标准强化学习与深度强化学习的区别</div>
+
+![1.15a](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.15a.png)
+
+（a）标准强化学习
+
+![1.15b](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.15b.png)
+
+（b）深度强化学习
+图 1.10 标准强化学习与深度强化学习的区别
 
 ##### 1.1.4 强化学习的应用
 
@@ -232,10 +232,10 @@ $$
 
 （4）[穿衣服的智能体](https://www.youtube.com/watch?v=ixmE5nt2o88)。很多时候我们要在电影或者一些动画中实现人穿衣服的场景，通过手写执行命令让机器人穿衣服非常困难，穿衣服也是一种非常精细的操作。我们可以训练强化学习智能体来实现穿衣 服功能。我们还可以在里面加入一些扰动，智能体可以抵抗扰动。可能会有失败的情况（failure case）出 现，这样智能体就穿不进去衣服。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.17.png"/>
-</div>
-<div align=center>图 1.11 强化学习例子</div>
+
+![1.17](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.17.png)
+
+图 1.11 强化学习例子
 
 #### 1.2 序列决策
 
@@ -243,10 +243,10 @@ $$
 
 接下来我们介绍**序列决策（sequential decision making）**过程。强化学习研究的问题是智能体与环境交互的问题，图 1.12 左边的智能体一直在与图 1.12 右边的环境进行交互。智能体把它的动作输出给环境，环境取得这个动作后会进行下一步，把下一步的观测与这个动作带来的奖励返还给智能体。这样的交互会产生很多观测，智能体的目的是从这些观测之中学到能最大化奖励的策略。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.18.png"/>
-</div>
-<div align=center>图 1.12 智能体和环境</div>
+
+![1.18](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.18.png)
+
+图 1.12 智能体和环境
 
 ##### 1.2.2 奖励
 
@@ -273,10 +273,10 @@ $$
 S_{t}=f\left(H_{t}\right)
 $$
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.21.png"/>
-</div>
-<div align=center>图 1.13 玩Pong游戏</div>
+
+![1.21](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.21.png)
+
+图 1.13 玩Pong游戏
 
 
 Q：状态和观测有什么关系?
@@ -314,10 +314,10 @@ A：**状态**是对世界的完整描述，不会隐藏世界的信息。**观�
 
 如图 1.14 所示，从雅达利游戏来看，策略函数的输入就是游戏的一帧，它的输出决定智能体向左移动或者向右移动。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.26.png"/>
-</div>
-<div align=center>图 1.14 策略函数</div>
+
+![1.26](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.26.png)
+
+图 1.14 策略函数
 
 通常情况下，强化学习一般使用随机性策略，随机性策略有很多优点。比如，在学习时可以通过引入一定的随机性来更好地探索环境；
 随机性策略的动作具有多样性，这一点在多个智能体博弈时非常重要。采用确定性策略的智能体总是对同样的状态采取相同的动作，这会导致它的策略很容易被对手预测。
@@ -350,37 +350,37 @@ R(s,a)=\mathbb{E}\left[r_{t+1} \mid s_{t}=s, a_{t}=a\right]
 $$
 当我们有了策略、价值函数和模型3个组成部分后，就形成了一个**马尔可夫决策过程（Markov decision process）**。如图 1.15 所示，这个决策过程可视化了状态之间的转移以及采取的动作。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.29.png"/>
-</div>
-<div align=center>图 1.15 马尔可夫决策过程</div>
+
+![1.29](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.29.png)
+
+图 1.15 马尔可夫决策过程
 
 我们来看一个走迷宫的例子。如图 1.16 所示，要求智能体从起点（start）开始，然后到达终点（goal）的位置。每走一步，我们就会得到 $-$1 的奖励。我们可以采取的动作是往上、下、左、右走。我们用现在智能体所在的位置来描述当前状态。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.30.png"/>
-</div>
-<div align=center>图 1.16 走迷宫的例子</div>
+
+![1.30](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.30.png)
+
+图 1.16 走迷宫的例子
 
 
 我们可以用不同的强化学习方法来解这个环境。
 如果我们采取基于策略的强化学习（policy-based RL）方法，当学习好了这个环境后，在每一个状态，我们都会得到一个最佳的动作。如图 1.17 所示，比如我们现在在起点位置，我们知道最佳动作是往右走；在第二格的时候，得到的最佳动作是往上走；第三格是往右走......通过最佳的策略，我们可以最快地到达终点。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.31.png"/>
-</div>
-<div align=center>图 1.17 使用基于策略的强化学习方法得到的结果</div>
+
+![1.31](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.31.png)
+
+图 1.17 使用基于策略的强化学习方法得到的结果
 
 
 如果换成基于价值的强化学习（value-based RL）方法，利用价值函数作为导向，我们就会得到另外一种表征，每一个状态会返回一个价值。如图 1.18 所示，比如我们在起点位置的时候，价值是 $-$16，因为我们最快可以 16 步到达终点。因为每走一步会减1，所以这里的价值是 $-$16。
 当我们快接近终点的时候，这个数字变得越来越大。在拐角的时候，比如现在在第二格，价值是$-$15，智能体会看上、下两格，它看到上面格子的价值变大了，变成 $-$14 了，下面格子的价值是 $-$16，那么智能体就会采取一个往上走的动作。所以通过学习的价值的不同，我们可以抽取出现在最佳的策略。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.32.png"/>
-</div>
-<div align=center>图 1.18 使用基于价值的强化学习方法得到的结果</div>
+
+![1.32](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.32.png)
+
+图 1.18 使用基于价值的强化学习方法得到的结果
 
 
 ##### 1.4.4 强化学习智能体的类型
@@ -407,10 +407,10 @@ A: 对于一个状态转移概率已知的马尔可夫决策过程，我们可�
 有模型强化学习的流程如图 1.19 所示。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.35.png"/>
-</div>
-<div align=center>图 1.19 有模型强化学习流程</div>
+
+![1.35](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.35.png)
+
+图 1.19 有模型强化学习流程
 
 然而在实际应用中，智能体并不是那么容易就能知晓马尔可夫决策过程中的所有元素的。通常情况下，状态转移函数和奖励函数很难估计，甚至连环境中的状态都可能是未知的，这时就需要采用免模型强化学习。免模型强化学习没有对真实环境进行建模，智能体只能在真实环境中通过一定的策略来执行动作，等待奖励和状态迁移，然后根据这些反馈信息来更新动作策略，这样反复迭代直到学习到最优策略。
 
@@ -429,20 +429,20 @@ A：针对是否需要对真实环境建模，强化学习可以分为有模型�
 如图 1.20 所示，我们可以把几类模型放到同一个图里面。图 1.20 有3个组成成分：价值函数、策略和模型。按一个智能体具有三者中的三者、两者或一者的情况可以把它分成很多类。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.36.png"/>
-</div>
-<div align=center>图 1.20 强化学习智能体的类型</div>
+
+![1.36](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.36.png)
+
+图 1.20 强化学习智能体的类型
 
 #### 1.5 学习与规划
 
 学习（learning）和规划（planning）是序列决策的两个基本问题。
 如图 1.21 所示，在强化学习中，环境初始时是未知的，智能体不知道环境如何工作，它通过不断地与环境交互，逐渐改进策略。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/learning.png"/>
-</div>
-<div align=center>图 1.21 学习</div>
+
+![learning](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/learning.png)
+
+图 1.21 学习
 
 
 如图 1.22 所示，在规划中，环境是已知的，智能体被告知了整个环境的运作规则的详细信息。智能体能够计算出一个完美的模型，并且在不需要与环境进行任何交互的时候进行计算。智能体不需要实时地与环境交互就能知道未来环境，只需要知道当前的状态，就能够开始思考，来寻找最优解。
@@ -451,10 +451,10 @@ A：针对是否需要对真实环境建模，强化学习可以分为有模型�
 一个常用的强化学习问题解决思路是，先学习环境如何工作，也就是了解环境工作的方式，即学习得到一个模型，然后利用这个模型进行规划。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/planning.png"/>
-</div>
-<div align=center>图 1.22 规划</div>
+
+![planning](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/planning.png)
+
+图 1.22 规划
 
 #### 1.6 探索和利用
 
@@ -483,10 +483,10 @@ A：针对是否需要对真实环境建模，强化学习可以分为有模型�
 
 事实上，探索（估计摇臂的优劣）和利用（选择当前最优摇臂)这两者是矛盾的，因为尝试次数（总投币数）有限，加强了一方则自然会削弱另一方，这就是强化学习所面临的**探索-利用窘境（exploration-exploitation dilemma）**。显然，想要累积奖励最大，则必须在探索与利用之间达成较好的折中。
 
-<div align=center>
-<img width="300" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.39.png"/>
-</div>
-<div align=center>图 1.23 <i>K</i>-臂赌博机图示</div>
+
+![1.39](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.39.png)
+
+图 1.23 <i>K</i>-臂赌博机图示
 
 #### 1.7 强化学习实验
 强化学习是一个理论与实践相结合的机器学习分支，我们不仅要理解它算法背后的一些数学原理，还要通过上机实践实现算法。在很多实验环境里面去探索算法能不能得到预期效果也是一个非常重要的过程。
@@ -497,10 +497,10 @@ OpenAI是一家非营利性的人工智能研究公司，其公布了非常多�
 如图 1.24 所示，OpenAI 的 **Gym库**是一个环境仿真库，里面包含很多现有的环境。针对不同的场景，我们可以选择不同的环境。离散控制场景（输出的动作是可数的，比如Pong游戏中输出的向上或向下动作）一般使用雅达利环境评估；连续控制场景（输出的动作是不可数的，比如机器人走路时不仅有方向，还有角度，角度就是不可数的，是一个连续的量 ）一般使用 MuJoCo 环境评估。**Gym Retro**是对 Gym 环境的进一步扩展，包含更多的游戏。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.44.png"/>
-</div>
-<div align=center>图 1.24 OpenAI 的 Gym 库</div>
+
+![1.44](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.44.png)
+
+图 1.24 OpenAI 的 Gym 库
 
 
 我们可以通过 pip 来安装 Gym 库，由于 Gym 库 0.26.0 及其之后的版本对之前的代码不兼容，所以我们安装 0.26.0 之前的 Gym，比如 0.25.2。
@@ -537,10 +537,10 @@ for step in range(100):
 
 如图 1.25 所示，Gym 库里面有很多经典的控制类游戏。比如 Acrobot需要让一个双连杆机器人立起来；CartPole需要通过控制一辆小车，让杆立起来；MountainCar需要通过前后移动车，让它到达旗帜的位置。在刚开始测试强化学习的时候，我们可以选择这些简单环境，因为强化学习在这些环境中可以在一两分钟之内见到效果。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.46.png"/>
-</div>
-<div align=center>图1.25 经典控制问题</div>
+
+![1.46](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.46.png)
+
+图1.25 经典控制问题
 
 
 大家可以点[这个链接](https://www.gymlibrary.dev/environments/classic_control/)看一看这些环境。在刚开始测试强化学习的时候，可以选择这些简单环境，因为这些环境可以在一两分钟之内见到一个效果。
@@ -549,10 +549,10 @@ for step in range(100):
 观测越详细，我们就可以更好地描述当前所有的状态。这里有奖励的定义，如果能多走一步，我们就会得到一个奖励（奖励值为1），所以我们需要存活尽可能多的时间来得到更多的奖励。当杆的角度大于某一个角度（没能保持平衡），或者小车的中心到达图形界面窗口的边缘，或者累积步数大于200，游戏就结束了。所以智能体的目的是控制杆，让它尽可能地保持平衡以及尽可能保持在环境的中央。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.47.png"/>
-</div>
-<div align=center>图 1.26 CartPole-v0的例子</div>
+
+![1.47](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch1/1.47.png)
+
+图 1.26 CartPole-v0的例子
 
 
 
@@ -859,10 +859,10 @@ SimpleAgent 类对应策略的平均回合奖励在 $-$110 左右，而对于小
 ### 第 2 章 马尔可夫决策过程（MDP）
 图 2.1 介绍了强化学习里面智能体与环境之间的交互，智能体得到环境的状态后，它会采取动作，并把这个采取的动作返还给环境。环境得到智能体的动作后，它会进入下一个状态，把下一个状态传给智能体。在强化学习中，智能体与环境就是这样进行交互的，这个交互过程可以通过马尔可夫决策过程来表示，所以马尔可夫决策过程是强化学习的基本框架。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.1.png"/>
-</div>
-<div align=center>图 2.1 智能体与环境之间的交互</div>
+
+![2.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.1.png)
+
+图 2.1 智能体与环境之间的交互
 
 本章将介绍马尔可夫决策过程。在介绍马尔可夫决策过程之前，我们先介绍它的简化版本：马尔可夫过程（Markov process，MP）以及马尔可夫奖励过程（Markov reward process，MRP）。通过与这两种过程的比较，我们可以更容易理解马尔可夫决策过程。其次，我们会介绍马尔可夫决策过程中的**策略评估（policy evaluation）**，就是当给定决策后，我们怎么去计算它的价值函数。最后，我们会介绍马尔可夫决策过程的控制，具体有**策略迭代（policy iteration）** 和**价值迭代（value iteration）**两种算法。在马尔可夫决策过程中，它的环境是全部可观测的。但是很多时候环境里面有些量是不可观测的，但是这个部分观测的问题也可以转换成马尔可夫决策过程的问题。
 
@@ -885,10 +885,10 @@ $$
 离散时间的马尔可夫过程也称为**马尔可夫链（Markov chain）**。马尔可夫链是最简单的马尔可夫过程，其状态是有限的。例如，图 2.2 里面有4个状态，这4个状态在 $s_1,s_2,s_3,s_4$ 之间互相转移。比如从 $s_1$ 开始，$s_1$ 有 0.1 的概率继续存留在 $s_1$ 状态，有 0.2 的概率转移到 $s_2$，有 0.7 的概率转移到 $s_4$ 。如果 $s_4$ 是我们的当前状态，它有 0.3 的概率转移到 $s_2$，有 0.2 的概率转移到 $s_3$，有 0.5 的概率留在当前状态。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.2.png"/>
-</div>
- <div align=center>图 2.2 马尔可夫链示例</div>
+
+![2.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.2.png)
+
+ 图 2.2 马尔可夫链示例
 
 我们可以用**状态转移矩阵（state transition matrix）**$\boldsymbol{P}$ 来描述状态转移 $p\left(s_{t+1}=s^{\prime} \mid s_{t}=s\right)$：
 $$
@@ -911,10 +911,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.3.png"/>
-</div>
-<div align=center>图 2.3 马尔可夫过程的例子</div>
+
+![2.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.3.png)
+
+图 2.3 马尔可夫过程的例子
 
 
 #### 2.2 马尔可夫奖励过程
@@ -945,10 +945,10 @@ $$
   \boldsymbol{R}=[5,0,0,0,0,0,10]
 $$
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.4.png"/>
-</div>
- <div align=center>图 2.4 马尔可夫奖励过程的例子</div>
+ 
+![2.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.4.png)
+
+ 图 2.4 马尔可夫奖励过程的例子
 
 
 
@@ -1054,10 +1054,10 @@ $$
 假设有一个马尔可夫链如图 2.5a 所示，贝尔曼方程描述的就是当前状态到未来状态的一个转移。如图 2.5b 所示，假设我们当前在 $s_1$， 那么它只可能去到3个未来的状态：有 0.1 的概率留在它当前位置，有 0.2 的概率去到 $s_2$ 状态，有 0.7 的概率去到 $s_4$ 状态。所以我们把状态转移概率乘它未来的状态的价值，再加上它的即时奖励（immediate reward），就会得到它当前状态的价值。贝尔曼方程定义的就是当前状态与未来状态的迭代关系。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.5.png"/>
-</div>
-<div align=center>图 2.5 状态转移</div>
+
+![2.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.5.png)
+
+图 2.5 状态转移
 
 我们可以把贝尔曼方程写成矩阵的形式：
 $$
@@ -1109,10 +1109,10 @@ $$
 
 首先我们用蒙特卡洛方法来计算价值。如图 2.6  所示，蒙特卡洛方法就是当得到一个马尔可夫奖励过程后，我们可以从某个状态开始，把小船放到状态转移矩阵里面，让它“随波逐流”，这样就会产生一个轨迹。产生一个轨迹之后，就会得到一个奖励，那么直接把折扣的奖励即回报 $g$ 算出来。算出来之后将它积累起来，得到回报$G_t$。 当积累了一定数量的轨迹之后，我们直接用 $G_t$ 除以轨迹数量，就会得到某个状态的价值。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.6.png"/>
-</div>
- <div align=center>图 2.6 计算马尔可夫奖励过程价值的蒙特卡洛方法</div>
+
+![2.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.6.png)
+
+ 图 2.6 计算马尔可夫奖励过程价值的蒙特卡洛方法
 
 
 
@@ -1124,10 +1124,10 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.7.png"/>
-</div>
- <div align=center>图 2.7 计算马尔可夫奖励过程价值的动态规划算法</div>
+ 
+![2.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.7.png)
+
+ 图 2.7 计算马尔可夫奖励过程价值的动态规划算法
 
 
 
@@ -1141,10 +1141,10 @@ $$
 
 我们通过一个形象的例子来理解马尔可夫奖励过程。我们把一艘纸船放到河流之中，它就会随着水流而流动，它自身是没有动力的。所以我们可以把马尔可夫奖励过程看成一个随波逐流的例子，当我们从某一个点开始的时候，纸船就会随着事先定义好的状态转移进行流动，它到达每个状态后，我们都有可能获得一些奖励。
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.8.png"/>
-</div>
- <div align=center>图 2.8 马尔可夫奖励过程的例子</div>
+ 
+![2.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.8.png)
+
+ 图 2.8 马尔可夫奖励过程的例子
 
 
 
@@ -1179,10 +1179,10 @@ $$
 马尔可夫决策过程里面的状态转移与马尔可夫奖励过程以及马尔可夫过程的状态转移的差异如图 2.9 所示。马尔可夫过程/马尔可夫奖励过程的状态转移是直接决定的。比如当前状态是 $s$，那么直接通过转移概率决定下一个状态是什么。但对于马尔可夫决策过程，它的中间多了一层动作 $a$ ，即智能体在当前状态的时候，首先要决定采取某一种动作，这样我们会到达某一个黑色的节点。到达这个黑色的节点后，因为有一定的不确定性，所以当智能体当前状态以及智能体当前采取的动作决定过后，智能体进入未来的状态其实也是一个概率分布。在当前状态与未来状态转移过程中多了一层决策性，这是马尔可夫决策过程与之前的马尔可夫过程/马尔可夫奖励过程很不同的一点。在马尔可夫决策过程中，动作是由智能体决定的，智能体会采取动作来决定未来的状态转移。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.9.png"/>
-</div>
- <div align=center>图 2.9 马尔可夫决策过程与马尔可夫过程/马尔可夫奖励过程的状态转移的对比</div>
+
+![2.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.9.png)
+
+ 图 2.9 马尔可夫决策过程与马尔可夫过程/马尔可夫奖励过程的状态转移的对比
 
 ##### 2.3.3 马尔可夫决策过程中的价值函数
 
@@ -1266,9 +1266,9 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.10.png"/>
-</div>
+ 
+![2.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.10.png)
+
 
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;图 2.10 $V_{\pi}$备份图
 
@@ -1299,10 +1299,10 @@ $$
 
 
 
-<div align=center>
-<img width="650" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.11.png"/>
-</div>
-<div align=center>图 2.11 状态价值函数的计算分解</div>
+
+![2.11](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.11.png)
+
+图 2.11 状态价值函数的计算分解
 
 
 
@@ -1316,9 +1316,9 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.12.png"/>
-</div>
+ 
+![2.12](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.12.png)
+
 
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;图 2.12 $Q^{\pi}$的备份图
 
@@ -1335,10 +1335,10 @@ $$
 
 
 
- <div align=center>
-<img width="650" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/q_function_backup.png"/>
-</div>
- <div align=center>图 2.13 Q函数的计算分解</div>
+ 
+![q_function_backup](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/q_function_backup.png)
+
+ 图 2.13 Q函数的计算分解
 
 
 
@@ -1347,18 +1347,18 @@ $$
 已知马尔可夫决策过程以及要采取的策略 $\pi$ ，计算价值函数 $V_{\pi}(s)$ 的过程就是**策略评估**。策略评估在有些地方也被称为**（价值）预测[（value）prediction）]**，也就是预测我们当前采取的策略最终会产生多少价值。如图 2.14a 所示，对于马尔可夫决策过程，我们其实可以把它想象成一个摆渡的人在船上，她可以控制船的移动，避免船随波逐流。因为在每一个时刻，摆渡的人采取的动作会决定船的方向。如图 2.14b 所示，对于马尔可夫奖励过程与马尔可夫过程，纸的小船会随波逐流，然后产生轨迹。马尔可夫决策过程的不同之处在于有一个智能体控制船，这样我们就可以尽可能多地获得奖励。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.14.png"/>
-</div>
- <div align=center>图 2.14 马尔可夫决策过程与马尔可夫过程/马尔可夫奖励过程的区别</div>
+
+![2.14](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.14.png)
+
+ 图 2.14 马尔可夫决策过程与马尔可夫过程/马尔可夫奖励过程的区别
 
 我们再看一下策略评估的例子，探究怎么在决策过程中计算每一个状态的价值。如图 2.15 所示，假设环境里面有两种动作：往左走和往右走。现在的奖励函数应该是关于动作和状态两个变量的函数。但这里规定，不管智能体采取什么动作，只要到达状态 $s_1$，就有 5 的奖励；只要到达状态 $s_7$ ，就有 10 的奖励，到达其他状态没有奖励。我们可以将奖励函数表示为 $\boldsymbol{R}=[5,0,0,0,0,0,10]$。假设智能体现在采取一个策略：不管在任何状态，智能体采取的动作都是往左走，即采取的是确定性策略 $\pi(s)=\text{左}$。假设价值折扣因子$\gamma=0$，那么对于确定性策略，最后估算出的价值函数是一致的，即 $\boldsymbol{V}_{\pi}=[5,0,0,0,0,0,10]$。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.29.png"/>
-</div>
-<div align=center>图 2.15 策略评估示例</div>
+
+![2.29](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.29.png)
+
+图 2.15 策略评估示例
 
 
 我们可以直接通过贝尔曼方程来得到价值函数：
@@ -1388,10 +1388,10 @@ $$
 举一个例子来说明预测与控制的区别。首先是预测问题。在图 2.16a 的方格中，我们规定从 A $\to$ A' 可以得到 +10 的奖励，从 B $\to$ B' 可以得到 +5 的奖励，其他步骤的奖励为 $-$1。如图 2.16b 所示，现在，我们给定一个策略：在任何状态中，智能体的动作模式都是随机的，也就是上、下、左、右的概率均为0.25。预测问题要做的就是，求出在这种决策模式下，价值函数是什么。图 2.16c 是对应的价值函数。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.16.png"/>
-</div>
- <div align=center>图 2.16 网格世界例子：预测</div>
+
+![2.16](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.16.png)
+
+ 图 2.16 网格世界例子：预测
 
 
 
@@ -1399,11 +1399,11 @@ $$
  控制问题要做的就是，给定同样的条件，求出在所有可能的策略下最优的价值函数是什么，最优策略是什么。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.17.png"/>
-</div>
 
- <div align=center>图 2.17 网格世界例子：控制</div>
+![2.17](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.17.png)
+
+
+ 图 2.17 网格世界例子：控制
 
  
 
@@ -1439,10 +1439,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.18.png"/>
-</div>
- <div align=center>图 2.18 小网格世界环境</div>
+
+![2.18](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.18.png)
+
+ 图 2.18 小网格世界环境
 
 
 
@@ -1454,17 +1454,17 @@ $$
 
 
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.19.png"/>
-</div>
- <div align=center>图 2.19 网格世界：动态规划示例</div>
+
+![2.19](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.19.png)
+
+ 图 2.19 网格世界：动态规划示例
 
 如图 2.20a 所示，我们再迭代一次，之前有值的状态的周围状态也开始有值。因为周围状态与之前有值的状态是临近的，所以这就相当于把周围的状态转移过来。如图 2.20b 所示，我们逐步迭代，值是一直在变换的。
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.20.png"/>
-</div>
- <div align=center>图 2.20 网格世界：策略评估过程示例</div>
+
+![2.20](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.20.png)
+
+ 图 2.20 网格世界：策略评估过程示例
 
 当我们迭代了很多次之后，有些很远的状态的价值函数已经有值了，而且整个过程是一个呈逐渐扩散的过程，这其实也是策略评估的可视化。当我们每一步进行迭代的时候，远的状态就会得到一些值，值从已经有奖励的状态逐渐扩散。当我们执行很多次迭代之后，各个状态的值会逐渐稳定下来，最后值就会确定不变。收敛之后，每个状态的值就是它的状态价值。
 
@@ -1516,10 +1516,10 @@ $$
 策略迭代的过程与踢皮球一样。我们先给定当前已有的策略函数，计算它的状态价值函数。算出状态价值函数后，我们会得到一个 Q 函数。我们对Q 函数采取贪心的策略，这样就像踢皮球，“踢”回策略。然后进一步改进策略，得到一个改进的策略后，它还不是最佳的策略，我们再进行策略评估，又会得到一个新的价值函数。基于这个新的价值函数再进行 Q 函数的最大化，这样逐渐迭代，状态价值函数和策略就会收敛。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.21.png"/>
-</div>
- <div align=center>图 2.21 策略迭代</div>
+
+![2.21](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.21.png)
+
+ 图 2.21 策略迭代
 
 
 这里再来看一下第二个步骤————策略改进，看我们是如何改进策略的。得到状态价值函数后，我们就可以通过奖励函数以及状态转移函数来计算 Q 函数：
@@ -1536,10 +1536,10 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.46.png"/>
-</div>
- <div align=center>图 2.22 Q表格</div>
+ 
+![2.46](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.46.png)
+
+ 图 2.22 Q表格
 
 
 
@@ -1650,54 +1650,54 @@ $$
 价值迭代做的工作类似于价值的反向传播，每次迭代做一步传播，所以中间过程的策略和价值函数 是没有意义的。而策略迭代的每一次迭代的结果都是有意义的，都是一个完整的策略。图 2.23 所示为一个可视化的求最短路径的过程，在一个网格世界中，我们设定了一个终点，也就是左上角的点。不管我们在哪一个位置开始，我们都希望能够到达终点（实际上这个终点在迭代过程中是不必要的，只是为了更好地演示）。价值迭代的迭代过程像是一个从某一个状态（这里是我们的终点）反向传播到其他各个状态的过程，因为每次迭代只能影响到与之直接相关的状态。
  让我们回忆一下最优性原理定理：如果我们某次迭代求解的某个状态 $s$ 的价值函数 $V_{k+1}(s)$ 是最优解，它的前提是能够从该状态到达的所有状态 $s^{\prime}$ 都已经得到了最优解；如果不是，它所做的只是一个类似传递价值函数的过程。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.52.png"/>
-</div>
-<div align=center>图 2.23 例子：最短路径</div>
+
+![2.52](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.52.png)
+
+图 2.23 例子：最短路径
 
 如图 2.23 所示，实际上，对于每一个状态，我们都可以将其看成一个终点。迭代由每一个终点开始，我们每次都根据贝尔曼最优方程重新计算价值。如果它的相邻节点价值发生了变化，变得更好了，那么它的价值也会变得更好，一直到相邻节点都不变。因此，在我们迭代到 $V_7$ 之前，也就是还没将每个终点的最优的价值传递给其他的所有状态之前，中间的几个价值只是一种暂存的不完整的数据，它不能代表每一个状态的价值，所以生成的策略是没有意义的策略。价值迭代是一个迭代过程，图 2.23 可视化了从  $V_1$ 到 $V_7$  每一个状态的价值的变化。而且因为智能体每走一步就会得到一个负的价值，所以它需要尽快地到达终点，可以发现离它越远的状态，价值就越小。$V_7$ 收敛过后，右下角的价值是 $-$6，相当于它要走6步，才能到达终点。智能体离终点越近，价值越大。当我们得到最优价值后，我们就可以通过策略提取来得到最佳策略。
 
 ##### 2.3.13 策略迭代与价值迭代的区别
 我们来看一个马尔可夫决策过程控制的动态演示，图 2.24  所示为网格世界的初始化界面。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.54.png"/>
-</div>
-<div align=center>图 2.24 网格世界：初始化界面</div>
+
+![2.54](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.54.png)
+
+图 2.24 网格世界：初始化界面
 
 首先我们来看看策略迭代，之前的例子在每个状态都采取固定的随机策略，每个状态都以 0.25 的概率往上、下、左、右，没有策略的改变。但是我们现在想进行策略迭代，每个状态的策略都进行改变。如图 2.25a 所示，我们先执行一次策略评估，得到价值函数，每个状态都有一个价值函数。如图 2.25b 所示，我们接着进行策略改进，单击“策略更新（policy update）”，这时有些格子里面的策略已经产生变化。比如对于中间 $-$1 的这个状态，它的最佳策略是往下走。当我们到达 $-$1 状态后，我们应该往下走，这样就会得到最佳的价值。绿色右边的格子的策略也改变了，它现在选取的最佳策略是往左走，也就是在这个状态的时候，最佳策略应该是往左走。
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.25.png"/>
-</div>
- <div align=center>图 2.25 马尔可夫决策过程控制：策略迭代示例</div>
+
+![2.25](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.25.png)
+
+ 图 2.25 马尔可夫决策过程控制：策略迭代示例
 
 
 
 如图 2.27a 所示，我们再执行下一轮的策略评估，格子里面的值又被改变了。多次之后，格子里面的值会收敛。如图 2.27b 所示，我们再次执行策略更新，每个状态里面的值基本都改变了，它们不再上、下、左、右随机改变，而是会选取最佳的策略进行改变。
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.26.png"/>
-</div>
-<div align=center>图 2.26 马尔可夫决策过程控制：策略迭代示例</div>
+
+![2.26](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.26.png)
+
+图 2.26 马尔可夫决策过程控制：策略迭代示例
 
 
 如图 2.27a 所示，我们再次执行策略评估，格子的值又在不停地变化，变化之后又收敛了。如图 2.27b 所示，我们再执行一次策略更新。现在格子的值又会有变化，每一个状态中格子的最佳策略也会产生一些改变。如图 2.28a 所示，我们再执行一遍策略更新，格子的值没有发生变化，这说明整个马尔可夫决策过程已经收敛了。所以现在每个状态的值就是当前最佳的价值函数的值，当前状态对应的策略就是最佳的策略。
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.27.png"/>
-</div>
- <div align=center>图 2.27 马尔可夫决策过程控制：策略迭代示例</div>
+
+![2.27](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.27.png)
+
+ 图 2.27 马尔可夫决策过程控制：策略迭代示例
 
 通过上面的例子，我们知道策略迭代可以把网格世界“解决掉”。“解决掉”是指，不管在哪个状态，我们都可以利用状态对应的最佳的策略到达可以获得最多奖励的状态。
 
 
 如图 2.28b 所示，我们再用价值迭代来解马尔可夫决策过程，单击“切换成价值迭代”。 当格子的值确定后，就会产生它的最佳状态，最佳状态提取的策略与策略迭代得出的最佳策略是一致的。在每个状态，我们使用最佳策略，就可以到达得到最多奖励的状态。
 
-<div align=center>
-<img width="750" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.28.png"/>
-</div>
-<div align=center>图 2.28 马尔可夫决策过程控制：策略迭代示例</div>
+
+![2.28](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/2.28.png)
+
+图 2.28 马尔可夫决策过程控制：策略迭代示例
 
 
 我们再来对比策略迭代和价值迭代，这两个算法都可以解马尔可夫决策过程的控制问题。策略迭代分两步。首先进行策略评估，即对当前已经搜索到的策略函数进行估值。得到估值后，我们进行策略改进，即把 Q 函数算出来，进行进一步改进。不断重复这两步，直到策略收敛。价值迭代直接使用贝尔曼最优方程进行迭代，从而寻找最佳的价值函数。找到最佳价值函数后，我们再提取最佳策略。
@@ -1706,10 +1706,10 @@ $$
 总结如表 2.1 所示，我们使用动态规划算法来解马尔可夫决策过程里面的预测和控制，并且采取不同的贝尔曼方程。对于预测问题，即策略评估的问题，我们不停地执行贝尔曼期望方程，这样就可以估计出给定的策略，然后得到价值函数。对于控制问题，如果我们采取的算法是策略迭代，使用的就是贝尔曼期望方程；如果我们采取的算法是价值迭代，使用的就是贝尔曼最优方程。
 
 
-<div align=center>表 2.1 动态规划算法</div>
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/table_1.png"/>
-</div>
+表 2.1 动态规划算法
+
+![table_1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch2/table_1.png)
+
 
 #### 参考文献
 * [强化学习基础 David Silver 笔记](https://zhuanlan.zhihu.com/c_135909947)
@@ -1848,10 +1848,10 @@ $$
 在输出每一个动作之前，我们可以选择不同的动作。比如在 $t$ 时刻，我选择逃跑的时候，可能熊已经追上来了。如果在 $t$ 时刻，我没有选择装死，而是选择逃跑，这个时候熊已经追上来了，那么我就会转移到不同的状态。有一定的概率我会逃跑成功，也有一定的概率我会逃跑失败。我们用状态转移概率 $p\left[s_{t+1}, r_{t} \mid s_{t}, a_{t}\right]$ 来表示在状态 $s_t$ 选择动作 $a_t$ 的时候，转移到状态 $s_{t+1}$ ，而且得到奖励 $r_t$ 的概率是多少。状态转移概率是具有**马尔可夫性质**的（系统下一时刻的状态仅由当前时刻的状态决定，不依赖于以往任何状态）。因为在这个过程中，下一时刻的状态取决于当前的状态 $s_t$，它和之前的 $s_{t-1}$ 和 $s_{t-2}$ 没有关系。再加上这个过程也取决于智能体与环境交互的 $a_t$ ，所以包含了决策的过程，我们称这样的过程为马尔可夫决策过程。马尔可夫决策过程就是序列决策的经典的表现方式。马尔可夫决策过程也是强化学习里面一个非常基本的学习框架。状态、动作、状态转移概率和奖励 $(S$、$A$、$P$、$R)$，这4个合集就构成了强化学习马尔可夫决策过程的四元组，后面也可能会再加上折扣因子构成五元组。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.1.png"/>
-</div>
-<div align=center>图 3.1 马尔可夫决策过程四元组</div>
+
+![3.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.1.png)
+
+图 3.1 马尔可夫决策过程四元组
 
 
 ##### 3.1.1 有模型
@@ -1860,10 +1860,10 @@ $$
 我们与环境交互时，只能走一条完整的通路，这里面产生了一系列决策的过程，我们与环境交互产生了经验。我们会使用**概率函数（probability function）**$P\left[s_{t+1}, r_{t} \mid s_{t}, a_{t}\right]$和奖励函数 $R\left[s_{t}, a_{t}\right]$来描述环境。概率函数就是状态转移的概率，它反映的是环境的随机性。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.2.png"/>
-</div>
-<div align=center>图 3.2 状态转移与序列决策</div>
+
+![3.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.2.png)
+
+图 3.2 状态转移与序列决策
 
 如果我们知道概率函数和奖励函数，马尔可夫决策过程就是已知的，我们可以通过策略迭代和价值迭代来找最佳的策略。
 比如，在熊发怒的情况下，我如果选择装死，假设熊看到人装死就一定会走开，我们就称这里面的状态转移概率是 1。但如果在熊发怒的情况下，我选择逃跑而导致可能成功以及失败两种情况，转移到跑成功情况的概率大概 0.1，跑失败的概率大概是 0.9。
@@ -1877,10 +1877,10 @@ $$
 
 如图 3.3 所示，强化学习可以应用于完全未知的和随机的环境。强化学习像人类一样学习，人类通过尝试不同的路来学习，通过尝试不同的路，人类可以慢慢地了解哪个状态会更好。强化学习用价值函数 $V(S)$ 来表示状态是好的还是坏的，用 Q 函数来判断在什么状态下采取什么动作能够取得最大奖励，即用 Q 函数来表示状态-动作值。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.3.png"/>
-</div>
-<div align=center>图 3.3 免模型试错探索</div>
+
+![3.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.3.png)
+
+图 3.3 免模型试错探索
 
 ##### 3.1.3 有模型与免模型的区别
 
@@ -1888,19 +1888,19 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_1.png"/>
-</div>
-<div align=center>图 3.4 有模型强化学习方法</div>
+
+![model_free_1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_1.png)
+
+图 3.4 有模型强化学习方法
 
 
 如图 3.5 所示，当马尔可夫决策过程的模型未知或者模型很大时，我们可以使用免模型强化学习的方法。免模型强化学习方法没有获取环境的状态转移和奖励函数，而是让智能体与环境进行交互，采集大量的轨迹数据，智能体从轨迹中获取信息来改进策略，从而获得更多的奖励。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_2.png"/>
-</div>
-<div align=center>图 3.5 免模型强化学习方法</div>
+
+![model_free_2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_2.png)
+
+图 3.5 免模型强化学习方法
 
 
 #### 3.2 Q 表格
@@ -1909,36 +1909,36 @@ $$
 如图 3.6 所示，如果 **Q 表格**是一张已经训练好的表格，这张表格就像是一本生活手册。通过查看这本手册，我们就知道在熊发怒的时候，装死的价值会高一点；在熊离开的时候，我们偷偷逃跑会比较容易获救。
 这张表格里面 Q 函数的意义就是我们选择了某个动作后，最后能不能成功，就需要我们去计算在某个状态下选择某个动作，后续能够获得多少总奖励。如果可以预估未来的总奖励的大小，我们就知道在当前的状态下选择哪个动作价值更高。我们选择某个动作是因为这样未来可以获得的价值会更高。所以强化学习的目标导向性很强，环境给出的奖励是非常重要的反馈，它根据环境的奖励来做选择。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.4.png"/>
-</div>
-<div align=center>图 3.6 Q表格</div>
+
+![3.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.4.png)
+
+图 3.6 Q表格
 
 Q: 为什么我们可以用未来的总奖励来评价当前动作是好是坏?
 
 A: 例如，如图 3.7 所示，假设一辆车在路上，当前是红灯，我们直接闯红灯的奖励就很低，因为这违反了交通规则，我们得到的奖励是当前的单步奖励。可是如果我们的车是一辆救护车，我们正在运送病人，把病人快速送达医院的奖励非常高，而且越快奖励越高。在这种情况下，我们可能要闯红灯，因为未来的远期奖励太高了。这是因为在现实世界中奖励往往是延迟的，所以强化学习需要学习远期的奖励。我们一般会从当前状态开始，把后续有可能会收到的所有奖励加起来计算当前动作的 Q 值，让 Q 值可以真正代表当前状态下动作的真正价值。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.5.png"/>
-</div>
-<div align=center>图 3.7 未来的总奖励示例</div>
+
+![3.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.5.png)
+
+图 3.7 未来的总奖励示例
 
 但有的时候我们把目光放得太长远并不好。如果任务很快就结束，那么考虑到最后一步的奖励无可厚非。但如果任务是一个持续的没有尽头的任务，即**持续式任务（continuing task）**，我们把未来的奖励全部相加作为当前的状态价值就很不合理。
 股票就是一个典型的例子，如图 3.8 所示，我们关注的是累积的股票奖励，可是如果10年之后股票才有一次大涨大跌，我们肯定不会把10年后的奖励也作为当前动作的考虑因素。这个时候，我们就可以引入折扣因子 $\gamma$ 来计算未来总奖励，$\gamma \in [0,1]$，越往后 $\gamma^n$ 就会越小，越后面的奖励对当前价值的影响就会越小。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.6.png"/>
-</div>
-<div align=center>图 3.8 股票的例子</div>
+
+![3.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.6.png)
+
+图 3.8 股票的例子
 
 悬崖行走问题是强化学习的一个经典问题，如图 3.9 所示，
 该问题需要智能体从出发点 S 出发，到达目的地 G，同时避免掉进悬崖（cliff），每走一步就有 $-$1分 的惩罚，掉进悬崖会有 $-$100 分的惩罚，但游戏不会结束，智能体会回到出发点，游戏继续，直到到达目的地结束游戏。智能体需要尽快地到达目的地。
 为了到达目的地，智能体可以沿着例如蓝线和红线的路线行走。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.7.png"/>
-</div>
-<div align=center>图 3.9 悬崖行走问题</div>
+
+![3.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.7.png)
+
+图 3.9 悬崖行走问题
 
 在悬崖行走问题的环境中，我们怎么计算状态动作价值（未来的总奖励）呢？我们可以选择一条路线，计算出这条路线上每个状态动作的价值。在悬崖行走问题里面，智能体每走一步都会拿到 $-$1 分的奖励，只有到达目的地之后，智能体才会停止。
 * 如果 $\gamma = 0$，如图 3.10a 所示，我们考虑的就是单步的奖励，我们可以认为它是目光短浅的计算的方法。
@@ -1956,20 +1956,20 @@ G_{8}=r_{9}+\gamma G_{9}=-1+0.6 \times(-2.176)=-2.3056 \approx-2.3 \\
 \end{array} 
 $$
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.8.png"/>
-</div>
-<div align=center>图 3.10 折扣因子</div>
+
+![3.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.8.png)
+
+图 3.10 折扣因子
 
 
 类似于图 3.11，最后我们要求解的就是一张 Q 表格，它的行数是所有状态的数量，一般可以用坐标来表示格子的状态，也可以用 1、2、3、4、5、6、7 来表示不同的位置。Q 表格的列表示上、下、左、右4个动作。
 最开始的时候，Q 表格会全部初始化为0。智能体会不断和环境交互得到不同的轨迹，当交互的次数足够多的时候，我们就可以估算出每一个状态下，每个动作的平均总奖励，进而更新 Q  表格。Q表格的更新就是接下来要引入的强化概念。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.9.png"/>
-</div>
-<div align=center>图 3.11 Q表格</div>
+
+![3.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.9.png)
+
+图 3.11 Q表格
 
 
 **强化**是指我们可以用下一个状态的价值来更新当前状态的价值，其实就是强化学习里面自举的概念。在强化学习里面，我们可以每走一步更新一次 Q 表格，用下一个状态的 Q 值来更新当前状态的 Q 值，这种单步更新的方法被称为时序差分方法。
@@ -2043,10 +2043,10 @@ $$
 将其不停迭代，最后可以收敛。如图 3.12 所示，贝尔曼期望备份有两层加和，即内部加和和外部加和，计算两次期望，得到一个更新。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/MC_4.png"/>
-</div>
-<div align=center>图 3.12 贝尔曼期望备份</div>
+
+![MC_4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/MC_4.png)
+
+图 3.12 贝尔曼期望备份
 
 
 
@@ -2060,10 +2060,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/MC_5.png"/>
-</div>
-<div align=center>图 3.13 蒙特卡洛方法更新</div>
+
+![MC_5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/MC_5.png)
+
+图 3.13 蒙特卡洛方法更新
 
 
 蒙特卡洛方法相比动态规划方法是有一些优势的。首先，蒙特卡洛方法适用于环境未知的情况，而动态规划是有模型的方法。
@@ -2074,10 +2074,10 @@ $$
 为了让读者更好地理解时序差分这种更新方法，我们给出它的“物理意义”。我们先了解一下巴甫洛夫的条件反射实验，如图 3.14 所示，这个实验讲的是小狗会对盆里面的食物无条件产生刺激，分泌唾液。一开始小狗对于铃声这种中性刺激是没有反应的，可是我们把铃声和食物结合起来，每次先给它响一下铃，再给它喂食物，多次重复之后，当铃声响起的时候，小狗也会开始流口水。盆里的肉可以认为是强化学习里面那个延迟的奖励，声音的刺激可以认为是有奖励的那个状态之前的状态。多次重复实验之后，最后的奖励会强化小狗对于声音的条件反射，它会让小狗知道这个声音代表着有食物，这个声音对于小狗也就有了价值，它听到这个声音就会流口水。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.10.png"/>
-</div>
-<div align=center>图 3.14 强化概念：巴甫洛夫的条件反射实验</div>
+
+![3.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.10.png)
+
+图 3.14 强化概念：巴甫洛夫的条件反射实验
 
 
 如图 3.15 所示，巴甫洛夫效应揭示的是，当中性刺激（铃声）与无条件刺激（食物）相邻反复出现的时候，中性刺激也可以引起无条件刺激引起的唾液分泌，然后形成条件刺激。
@@ -2087,10 +2087,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.11.png"/>
-</div>
-<div align=center>图 3.15 强化示例</div>
+
+![3.11](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.11.png)
+
+图 3.15 强化示例
 
 
 为了让读者更加直观地感受下一个状态会如何影响上一个状态（状态价值迭代），我们推荐[时序差分学习网格世界演示](https://cs.stanford.edu/people/karpathy/reinforcejs/gridworld_td.html)。
@@ -2098,10 +2098,10 @@ $$
 在训练的过程中，小黄球在不断地试错，在探索中会先迅速地发现有奖励的格子。最开始的时候，有奖励的格子才有价值。当小黄球不断地重复走这些路线的时候，有价值的格子可以慢慢地影响它附近的格子的价值。
 反复训练之后，有奖励的格子周围的格子的状态就会慢慢被强化。强化就是价值最终收敛到最优的情况之后，小黄球就会自动往价值高的格子走，就可以走到能够拿到奖励的格子。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.13.png"/>
-</div>
-<div align=center>图 3.16 时序差分学习网格世界演示</div>
+
+![3.13](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.13.png)
+
+图 3.16 时序差分学习网格世界演示
 
 下面我们开始正式介绍时序差分方法。
 时序差分是介于蒙特卡洛和动态规划之间的方法，它是免模型的，不需要马尔可夫决策过程的转移矩阵和奖励函数。
@@ -2137,10 +2137,10 @@ $$
 如图 3.17 所示，时序差分方法只执行一步，状态的值就更新。蒙特卡洛方法全部执行完之后，到了终止状态之后，再更新它的值。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/TD_3.png"/>
-</div>
-<div align=center>图 3.17 时序差分方法相比蒙特卡洛方法的优势</div>
+
+![TD_3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/TD_3.png)
+
+图 3.17 时序差分方法相比蒙特卡洛方法的优势
 
 
 接下来，进一步比较时序差分方法和蒙特卡洛方法。
@@ -2165,9 +2165,9 @@ $$
 我们可以调整步数（step），变成 **$n$步时序差分（$n$-step TD）**。比如 TD(2)，即往前走两步，利用两步得到的回报，使用自举来更新状态的价值。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/TD_5.png"/>
-</div>
+
+![TD_5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/TD_5.png)
+
 
 $\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$ 图 3.18 $n$步时序差分
 
@@ -2212,10 +2212,10 @@ $$
 $$
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_2.png"/>
-</div>
-<div align=center>图 3.19 统一视角：动态规划方法备份</div>
+
+![comparison_2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_2.png)
+
+图 3.19 统一视角：动态规划方法备份
 
 如图 3.20 所示，蒙特卡洛方法在当前状态下，采取一条支路，在这条路径上进行更新，更新这条路径上的所有状态，即
 $$
@@ -2223,10 +2223,10 @@ V\left(s_{t}\right) \leftarrow V\left(s_{t}\right)+\alpha\left(G_{t}-V\left(s_{t
 $$
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_3.png"/>
-</div>
-<div align=center>图 3.20 统一视角：蒙特卡洛备份</div>
+
+![comparison_3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_3.png)
+
+图 3.20 统一视角：蒙特卡洛备份
 
 
 如图 3.20 所示，时序差分从当前状态开始，往前走了一步，关注的是非常局部的步骤，即
@@ -2235,18 +2235,18 @@ $$
 $$
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_4.png"/>
-</div>
-<div align=center>图 3.21 统一视角：时序差分方法备份</div>
+
+![comparison_4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_4.png)
+
+图 3.21 统一视角：时序差分方法备份
 
 
 如图 3.22 所示，如果 时序差分方法需要更广度的更新，就变成了 动态规划方法（因为动态规划方法是把所有状态都考虑进去来进行更新）。如果时序差分方法需要更深度的更新，就变成了蒙特卡洛方法。图 3.22 右下角是穷举搜索的方法（exhaustive search），穷举搜索的方法不仅需要很深度的信息，还需要很广度的信息。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_5.png"/>
-</div>
-<div align=center>图 3.22 强化学习的统一视角</div>
+
+![comparison_5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/comparison_5.png)
+
+图 3.22 强化学习的统一视角
 
 #### 3.4 免模型控制
 在我们不知道马尔可夫决策过程模型的情况下，如何优化价值函数，得到最佳的策略呢？我们可以把策略迭代进行广义的推广，使它能够兼容蒙特卡洛和时序差分的方法，即带有蒙特卡洛方法和时序差分方法的**广义策略迭代（generalized policy iteration，GPI）**。
@@ -2268,10 +2268,10 @@ Q_{\pi_{i}}(s, a)=R(s, a)+\gamma \sum_{s^{\prime} \in S} P\left(s^{\prime} \mid 
 $$
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_1.png"/>
-</div>
-<div align=center>图 3.23 策略迭代</div>
+
+![model_free_control_1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_1.png)
+
+图 3.23 策略迭代
 
 
 这里有一个问题：当我们不知道奖励函数和状态转移时，如何进行策略的优化？
@@ -2282,10 +2282,10 @@ $$
 \pi(s)=\underset{a}{\arg \max} Q(s, a)
 $$
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_3.png"/>
-</div>
-<div align=center>图 3.24 广义策略迭代</div>
+
+![model_free_control_3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_3.png)
+
+图 3.24 广义策略迭代
 
 
 图 3.25 所示为蒙特卡洛方法估计 Q 函数的算法。
@@ -2295,10 +2295,10 @@ $$
 如何用蒙特卡洛方法来填 Q 表格是这个算法的核心。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_4.png"/>
-</div>
-<div align=center>图 3.25 基于探索性开始的蒙特卡洛方法</div>
+
+![model_free_control_4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_4.png)
+
+图 3.25 基于探索性开始的蒙特卡洛方法
 
 
 为了确保蒙特卡洛方法能够有足够的探索，我们使用了 $\varepsilon$-贪心（$\varepsilon\text{-greedy}$）探索。
@@ -2317,9 +2317,9 @@ $$
 
 基于 $\varepsilon$-贪心探索的蒙特卡洛方法如图 3.26 所示。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_7.png"/>
-</div>
+
+![model_free_control_7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/model_free_control_7.png)
+
 
 $\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$ 图 3.26 基于 $\varepsilon$-贪心探索的蒙特卡洛方法
 
@@ -2331,10 +2331,10 @@ $\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad\qquad$ 图 3.26 基于 $\varep
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/bias_variance.png"/>
-</div>
-<div align=center>图 3.27 偏差-方差</div>
+
+![bias_variance](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/bias_variance.png)
+
+图 3.27 偏差-方差
 
 
 
@@ -2354,10 +2354,10 @@ Sarsa 直接估计 Q 表格，得到 Q 表格后，就可以更新策略。
 为了理解式(3.4)，
 如图 3.28 所示，我们先把 $r_{t+1}+\gamma Q\left(s_{t+1}, a_{t+1}\right.)$ 当作目标值，即 $Q(s_t,a_t)$ 想要逼近的目标值。$r_{t+1}+\gamma Q\left(s_{t+1}, a_{t+1}\right.)$ 就是时序差分目标。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.14.png"/>
-</div>
-<div align=center>图 3.28 时序差分单步更新</div>
+
+![3.14](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.14.png)
+
+图 3.28 时序差分单步更新
 
 
 我们想要计算的就是 $Q(s_t,a_t)$ 。因为最开始 Q 值都是随机初始化或者是初始化为0，所以它需要不断地去逼近它理想中真实的 Q 值（时序差分目标），$r_{t+1}+\gamma Q\left(s_{t+1}, a_{t+1}\right)-Q\left(s_{t}, a_{t}\right)$ 就是时序差分误差。
@@ -2385,10 +2385,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.15.png"/>
-</div>
-<div align=center>图 3.29 Sarsa算法</div>
+
+![3.15](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.15.png)
+
+图 3.29 Sarsa算法
 
 
 
@@ -2418,10 +2418,10 @@ $$
 （2）获取 $(s_{t}, a_{t}, r_{t+1}, s_{t+1}, a_{t+1})$  这几个值更新 Q 表格。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.16.png"/>
-</div>
-<div align=center>图 3.30 Sarsa代码实现示意</div>
+
+![3.16](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.16.png)
+
+图 3.30 Sarsa代码实现示意
 
 
 
@@ -2434,20 +2434,20 @@ Q学习是一种**异策略（off-policy）**算法。如图 3.31 所示，异�
 行为策略是探索环境的策略，一般用 $\mu$ 来表示。行为策略可以大胆地去探索到所有可能的轨迹，采集轨迹，采集数据，然后把采集到的数据“喂”给目标策略学习。而且“喂”给目标策略的数据中并不需要 $a_{t+1}$ ，而 Sarsa 是要有 $a_{t+1}$ 的。行为策略像是一个战士，可以在环境里面探索所有的动作、轨迹和经验，然后把这些经验交给目标策略去学习。比如目标策略优化的时候，Q学习不会管我们下一步去往哪里探索，它只选取奖励最大的策略。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.17.png"/>
-</div>
-<div align=center>图 3.31 异策略</div>
+
+![3.17](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.17.png)
+
+图 3.31 异策略
 
 
 再例如，如图 3.32 所示，比如环境是波涛汹涌的大海，但学习策略（learning policy）太“胆小”了，无法直接与环境交互学习，所以我们有了探索策略（exploratory policy），探索策略是一个不畏风浪的海盗，它非常激进，可以在环境中探索。因此探索策略有很多经验，它可以把这些经验“写成稿子”，然后“喂”给学习策略。学习策略可以通过稿子进行学习。
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/off_policy_learning.png"/>
-</div>
-<div align=center>图 3.32 异策略例子</div>
+
+![off_policy_learning](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/off_policy_learning.png)
+
+图 3.32 异策略例子
 
 
 
@@ -2484,10 +2484,10 @@ Sarsa 在更新 Q 表格的时候，它用到的是 $A'$ 。我们要获取下�
 Q学习默认的下一个动作不是通过行为策略来选取的，Q学习直接看Q表格，取它的最大化的值，它是默认 $A'$ 为最佳策略选取的动作，所以 Q学习 在学习的时候，不需要传入 $A'$，即 $a_{t+1}$  的值。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.18.png"/>
-</div>	
-<div align=center>图 3.33 Sarsa与Q学习的伪代码</div>
+
+![3.18](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.18.png)
+	
+图 3.33 Sarsa与Q学习的伪代码
 
 
 Sarsa 和 Q学习 的更新公式是一样的，区别只在目标计算的部分，
@@ -2502,10 +2502,10 @@ Q学习 是 $r_{t+1}+\gamma  \underset{a}{\max} Q\left(s_{t+1}, a\right)$ 。
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.19.png"/>
-</div>
-<div align=center>图 3.34 Sarsa与Q学习的区别</div>
+
+![3.19](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.19.png)
+
+图 3.34 Sarsa与Q学习的区别
 
 
 
@@ -2520,10 +2520,10 @@ Q学习 是 $r_{t+1}+\gamma  \underset{a}{\max} Q\left(s_{t+1}, a\right)$ 。
 
 表格型方法总结如图 3.35 所示。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.21.png"/>
-</div>
-<div align=center>图 3.35 表格型方法总结</div>
+
+![3.21](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch3/3.21.png)
+
+图 3.35 表格型方法总结
 
 
 #### 参考文献
@@ -2735,41 +2735,41 @@ for i_ep in range(cfg.train_eps): # train_eps: 训练的最大episodes数
 #### 4.1 策略梯度算法
 如图 4.1 所示，强化学习有 3 个组成部分：**演员（actor）**、**环境**和**奖励函数**。智能体玩视频游戏时，演员负责操控游戏的摇杆， 比如向左、向右、开火等操作；环境就是游戏的主机，负责控制游戏的画面、负责控制怪兽的移动等；奖励函数就是当我们做什么事情、发生什么状况的时候，可以得到多少分数， 比如打败一只怪兽得到 20 分等。同样的概念用在围棋上也是一样的，演员就是 Alpha Go，它要决定棋子落在哪一个位置；环境就是对手；奖励函数就是围棋的规则，赢就是得一分，输就是负一分。在强化学习里，环境与奖励函数不是我们可以控制的，它们是在开始学习之前给定的。我们唯一需要做的就是调整演员里面的策略，使得演员可以得到最大的奖励。演员里面的策略决定了演员的动作，即给定一个输入，它会输出演员现在应该要执行的动作。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.1.png"/>
-</div>
-<div align=center>图 4.1 强化学习的组成部分</div>
+
+![4.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.1.png)
+
+图 4.1 强化学习的组成部分
 
 策略一般记作 $\pi$。假设我们使用深度学习来做强化学习，策略就是一个网络。网络里面有一些参数，我们用 $\theta$ 来代表 $\pi$ 的参数。网络的输入是智能体看到的东西，如果让智能体玩视频游戏，智能体看到的东西就是游戏的画面。智能体看到的东西会影响我们训练的效果。例如，在玩游戏的时候， 也许我们觉得游戏的画面是前后相关的，所以应该让策略去看从游戏开始到当前这个时间点之间所有画面的总和。因此我们可能会觉得要用到循环神经网络（recurrent neural network，RNN）来处理它，不过这样会比较难处理。我们可以用向量或矩阵来表示智能体的观测，并将观测输入策略网络，策略网络就会输出智能体要采取的动作。图 4.2 就是具体的例子，策略是一个网络；输入是游戏的画面，它通常是由像素组成的；输出是我们可以执行的动作，有几个动作，输出层就有几个神经元。假设我们现在可以执行的动作有 3 个，输出层就有 3 个神经元，每个神经元对应一个可以采取的动作。输入一个东西后，网络会给每一个可以采取的动作一个分数。我们可以把这个分数当作概率，演员根据概率的分布来决定它要采取的动作，比如 0.7 的概率向左走、0.2 的概率向右走、0.1的概率开火等。概率分布不同，演员采取的动作就会不一样。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.2.png"/>
-</div>
-<div align=center>图 4.2 演员的策略</div>
+
+![4.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.2.png)
+
+图 4.2 演员的策略
 
 
 接下来我们用一个例子来说明演员与环境交互的过程。如图 4.3 所示，首先演员会看到一个视频游戏的初始画面，接下来它会根据内部的网络（内部的策略）来决定一个动作。假设演员现在决定的动作是向右，决定完动作以后，它就会得到一个奖励，奖励代表它采取这个动作以后得到的分数。
 
 我们把游戏初始的画面记作 $s_1$， 把第一次执行的动作记作 $a_1$，把第一次执行动作以后得到的奖励记作 $r_1$。不同的人有不同的记法，有人觉得在 $s_1$ 执行 $a_1$ 得到的奖励应该记为 $r_2$，这两种记法都可以。演员决定一个动作以后，就会看到一个新的游戏画面$s_2$。把 $s_2$ 输入给演员，演员决定要开火，它可能打败了一只怪兽，就得到五分。这个过程反复地持续下去，直到在某一个时间点执行某一个动作，得到奖励之后，环境决定这个游戏结束。例如，如果在这个游戏里面，我们控制宇宙飞船去击杀怪兽，如果宇宙飞船被毁或是把所有的怪兽都清空，游戏就结束了。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.3.png"/>
-</div>
-<div align=center>图 4.3 玩视频游戏的例子</div>    
+
+![4.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.3.png)
+
+图 4.3 玩视频游戏的例子    
 
 如图 4.4 所示，一场游戏称为一个回合。将这场游戏里面得到的所有奖励都加起来，就是**总奖励（total reward）**，也就是**回报**，我们用$R$来表示它。演员要想办法来最大化它可以得到的奖励。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.4.png"/>
-</div>
-<div align=center>图 4.4 回报的例子</div>
+
+![4.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.4.png)
+
+图 4.4 回报的例子
 
 如图 4.5 所示，首先，环境是一个函数，我们可以把游戏的主机看成一个函数，虽然它不一定是神经网络，可能是基于规则的（rule-based）模型，但我们可以把它看作一个函数。这个函数一开始先“吐”出一个状态（游戏画面 $s_1$），接下来演员看到游戏画面 $s_1$ 以后，它“吐”出动作 $a_1$。环境把动作 $a_1$ 当作它的输入，再“吐”出新的游戏画面 $s_2$。演员看到新的游戏画面$s_2$，再采取新的动作 $a_2$。环境看到 $a_2$，再“吐”出 $s_3$ ......这个过程会一直持续下去，直到环境觉得应该要停止为止。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.5.png"/>
-</div>
-<div align=center>图 4.5 演员和环境</div>
+
+![4.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.5.png)
+
+图 4.5 演员和环境
 
 在一场游戏里面，我们把环境输出的 $s$ 与演员输出的动作 $a$ 全部组合起来，就是一个轨迹，即
 $$
@@ -2798,10 +2798,10 @@ $$
 我们要穷举所有可能的轨迹 $\tau$， 每一个轨迹 $\tau$ 都有一个概率。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.6.png"/>
-</div>
-<div align=center>图 4.6 期望的奖励</div>
+
+![4.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.6.png)
+
+图 4.6 期望的奖励
 
 
 比如 $\theta$ 对应的模型很强，如果有一个回合 $\theta$ 很快就死掉了，因为这种情况很少会发生，所以该回合对应的轨迹 $\tau$ 的概率就很小；如果有一个回合 $\theta$ 一直没死，因为这种情况很可能发生，所以该回合对应的轨迹 $\tau$ 的概率就很大。我们可以根据 $\theta$ 算出某一个轨迹 $\tau$ 出现的概率，接下来计算 $\tau$ 的总奖励。总奖励使用 $\tau$ 出现的概率进行加权，对所有的 $\tau$ 进行求和，就是期望值。给定一个参数，我们可以计算期望值为
@@ -2881,10 +2881,10 @@ $$
     \nabla \bar{R}_{\theta}=\frac{1}{N} \sum_{n=1}^{N} \sum_{t=1}^{T_{n}} R\left(\tau^{n}\right) \nabla \log p_{\theta}\left(a_{t}^{n} | s_{t}^{n}\right)\tag{4.4}
 $$
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.8.png"/>
-</div>
-<div align=center>图 4.7 策略梯度</div>
+
+![4.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.8.png)
+
+图 4.7 策略梯度
 
 
 
@@ -2894,10 +2894,10 @@ $$
 
 在解决分类问题时，我们要有输入和正确的输出，要有训练数据。但在强化学习中，我们通过采样来获得训练数据。假设在采样的过程中，在某个状态下，我们采样到要采取动作 $a$， 那么就把动作 $a$ 当作标准答案（ground truth）。比如，我们在某个状态下，采样到要向左。因为是采样，所以向左这个动作不一定概率最高。假设我们采样到向左，在训练的时候，让智能体调整网络的参数， 如果看到某个状态，我们就向左。在一般的分类问题里面，我们在实现分类的时候，目标函数都会写成最小化交叉熵（cross entropy），最小化交叉熵就是最大化对数似然（log likelihood）。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.9.png"/>
-</div>
-<div align=center>图 4.8 策略梯度实现细节</div>
+
+![4.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.9.png)
+
+图 4.8 策略梯度实现细节
 
 我们在解决分类问题的时候，目标函数就是最大化或最小化的对象，因为我们现在是最大化似然（likelihood），所以其实是最大化，我们要最大化
 $$
@@ -2911,10 +2911,10 @@ $$
 
 我们要把每一笔训练数据，都使用 $R(\tau)$ 进行加权。如图 4.9 所示，我们使用 PyTorch 或 TensorFlow 之类的深度学习框架计算梯度就结束了，与一般分类问题差不多。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.10.png"/>
-</div>
-<div align=center>图 4.9 自动求梯度</div>
+
+![4.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.10.png)
+
+图 4.9 自动求梯度
 
 #### 4.2 策略梯度实现技巧
 下面我们介绍一些在实现策略梯度时可以使用的技巧。
@@ -2927,10 +2927,10 @@ $$
 
 
 ​    
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.12.png"/>
-</div>
-<div align=center>图 4.10 动作的概率的例子</div>
+
+![4.12](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.12.png)
+
+图 4.10 动作的概率的例子
 
 
 
@@ -2941,10 +2941,10 @@ $$
 这是一个理想的情况，但是实际上，我们是在做采样。本来这边应该是一个期望（expectation），对所有可能的$s$与$a$的对进行求和。 但我们真正在学习的时候，只是采样了少量的$s$与$a$的对。 因为我们做的是采样，所以有一些动作可能从来都没有被采样到。如图 4.11 所示，在某一个状态，虽然可以执行的动作有 a、b、c，但我们可能只采样到动作 b 或者 只采样到动作 c，没有采样到动作 a。但现在所有动作的奖励都是正的，所以根据式(4.6)，在这个状态采取a、b、c的概率都应该要提高。我们会遇到的问题是，因为 a 没有被采样到，所以其他动作的概率如果都要提高，a 的概率就要下降。 所以a不一定是一个不好的动作， 它只是没有被采样到。但因为 a 没有被采样到，它的概率就会下降，这显然是有问题的。要怎么解决这个问题呢？我们会希望奖励不总是正的。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.13.png"/>
-</div>
-<div align=center>图 4.11 采样动作的问题</div>
+
+![4.13](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.13.png)
+
+图 4.11 采样动作的问题
 
 
 
@@ -2971,10 +2971,10 @@ $$
 一个做法是计算某个状态-动作对的奖励的时候，不把整场游戏得到的奖励全部加起来，只计算从这个动作执行以后得到的奖励。因为这场游戏在执行这个动作之前发生的事情是与执行这个动作是没有关系的，所以在执行这个动作之前得到的奖励都不能算是这个动作的贡献。我们把执行这个动作以后发生的所有奖励加起来，才是这个动作真正的贡献。所以图 4.12a 中，在 $s_b$ 执行 $a_2$ 这件事情，也许它真正会导致我们得到的分数应该是 $-$2 分而不是 +3 分，因为前面的 +5 分 并不是执行 $a_2$ 的功劳。实际上执行 $a_2$ 以后，到游戏结束前， 我们只被扣了 2 分，所以分数应该是 $-$2。同理，图 4.12b 中，执行 $a_2$ 实际上不应该是扣 7 分，因为前面扣 5 分，与在 $s_b$ 执行 $a_2$ 是没有关系的。在 $s_b$ 执行 $a_2$，只会让我们被扣两分而已。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.15.png"/>
-</div>
-<div align=center>图 4.12 分配合适的分数</div>
+
+![4.15](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.15.png)
+
+图 4.12 分配合适的分数
 
 
 分配合适的分数这一技巧可以表达为
@@ -3001,10 +3001,10 @@ $$
 相比蒙特卡洛方法一个回合更新一次，时序差分方法是每个步骤更新一次，即每走一步，更新一次，时序差分方法的更新频率更高。时序差分方法使用Q函数来近似地表示未来总奖励 $G_t$。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.20.png"/>
-</div>
-<div align=center>图 4.13 蒙特卡洛方法与时序差分方法</div>
+
+![4.20](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.20.png)
+
+图 4.13 蒙特卡洛方法与时序差分方法
 
 
 
@@ -3030,10 +3030,10 @@ $$
 然后针对每个动作计算梯度 $\nabla \log \pi(a_t|s_t,\theta)$ 。在代码上计算时，我们要获取神经网络的输出。神经网络会输出每个动作对应的概率值（比如0.2、0.5、0.3），然后我们还可以获取实际的动作$a_t$，把动作转成独热（one-hot）向量（比如[0,1,0]）与 $\log [0.2,0.5,0.3]$ 相乘就可以得到 $\log \pi(a_t|s_t,\theta)$  。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.22.png"/>
-</div>
-<div align=center>图 4.14 REINFORCE算法</div>
+
+![4.22](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.22.png)
+
+图 4.14 REINFORCE算法
 
 
 
@@ -3044,56 +3044,56 @@ $$
 
 
 ​    
-   <div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.23.png"/>
-</div>
-   <div align=center>图 4.15 监督学习例子：手写数字识别</div>
+   
+![4.23](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.23.png)
+
+   图 4.15 监督学习例子：手写数字识别
 
 
 
 如图 4.16 所示，我们所要做的就是提高输出 9 的概率，降低输出其他数字的概率，让神经网络输出的概率分布能够更贴近真实值的概率分布。我们可以用交叉熵来表示两个概率分布之间的差距。
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.24.png"/>
-</div>
-<div align=center>图 4.16 提高数字9的概率</div>
+
+![4.24](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.24.png)
+
+图 4.16 提高数字9的概率
 
 
 我们看一下监督学习的优化流程，即怎么让输出逼近真实值。如图 4.17 所示，监督学习的优化流程就是将图片作为输入传给神经网络，神经网络会判断图片中的数字属于哪一类数字，输出所有数字可能的概率，再计算交叉熵，即神经网络的输出 $Y_i$ 和真实的标签值 $Y_i'$ 之间的距离 $-\sum Y_{i}^{\prime} \cdot \log \left(Y_{i}\right)$。我们希望尽可能地缩小这两个概率分布之间的差距，计算出的交叉熵可以作为损失函数传给神经网络里面的优化器进行优化，以自动进行神经网络的参数更新。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.25.png"/>
-</div>
-<div align=center>图 4.17 优化流程</div>
+
+![4.25](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.25.png)
+
+图 4.17 优化流程
 
 
 
 类似地，如图 4.18  所示，策略梯度预测每一个状态下应该要输出的动作的概率，即输入状态 $s_t$，输出动作$a_t$的概率，比如 0.02、0.08、0.9。实际上输出给环境的动作是随机选择一个动作，比如我们选择向右这个动作，它的独热向量就是（0,0,1）。我们把神经网络的输出和实际动作代入交叉熵的公式就可以求出输出动作的概率和实际动作的概率之间的差距。但实际的动作 $a_t$ 只是我们输出的真实的动作，它不一定是正确的动作，它不能像手写数字识别一样作为一个正确的标签来指导神经网络朝着正确的方向更新，所以我们需要乘一个奖励回报 $G_t$。$G_t$相当于对真实动作的评价。如果 $G_t$ 越大，未来总奖励越大，那就说明当前输出的真实的动作就越好，损失就越需要重视。如果 $G_t$ 越小，那就说明动作 $a_t$ 不是很好，损失的权重就要小一点儿，优化力度也要小一点儿。通过与手写数字识别的一个对比，我们就知道为什么策略梯度损失会构造成这样。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.26.png"/>
-</div>
-<div align=center>图 4.18 策略梯度损失</div>
+
+![4.26](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.26.png)
+
+图 4.18 策略梯度损失
 
 
 如图 4.19 所示，实际上我们在计算策略梯度损失的时候，要先对实际执行的动作取独热向量，再获取神经网络预测的动作概率，将它们相乘，我们就可以得到 $\log \pi(a_t|s_t,\theta)$，这就是我们要构造的损失。因为我们可以获取整个回合的所有的轨迹，所以我们可以对这一条轨迹里面的每个动作都去计算一个损失。把所有的损失加起来，我们再将其“扔”给 Adam 的优化器去自动更新参数就好了。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.27.png"/>
-</div>
-<div align=center>图 4.19 损失计算</div>
+
+![4.27](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.27.png)
+
+图 4.19 损失计算
 
 
 图 4.20 所示为REINFORCE 算法示意，首先我们需要一个策略模型来输出动作概率，输出动作概率后，通过 **sample()** 函数得到一个具体的动作，与环境交互后，我们可以得到整个回合的数据。得到回合数据之后，我们再去执行 **learn()** 函数，在 **learn()** 函数里面，我们就可以用这些数据去构造损失函数，“扔”给优化器优化，更新我们的策略模型。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.28.png"/>
-</div>
-<div align=center>图 4.20 REINFORCE算法示意</div>
+
+![4.28](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch4/4.28.png)
+
+图 4.20 REINFORCE算法示意
 
 #### 参考文献
 * [Intro to Reinforcement Learning (强化学习纲要）](https://github.com/zhoubolei/introRL)
@@ -3293,10 +3293,10 @@ $\operatorname{Var}_{x \sim p}[f(x)]$ 和 $\operatorname{Var}_{x \sim q}\left[f(
 接下来我们改成从 $q(x)$ 采样，因为 $q(x)$ 在右边区域的概率比较高，所以如果我们采样的点不够多，可能只会采样到右侧。如果我们只采样到右侧，可能 $\mathbb{E}_{x \sim q}\left[f(x) \frac{p(x)}{q(x)}\right]$ 是正的。
 我们这边采样到这些点，去计算它们的 $f(x) \frac{p(x)}{q(x)}$ 都是正的。我们采样到这些点都是正的，取期望值以后也都是正的，这是因为采样的次数不够多。假设我们采样次数很少，只能采样到右边。左边虽然概率很低，但也有可能被采样到。假设我们好不容易采样到左边的点，因为左边的点的$p(x)$ 和 $q(x)$ 是差很多的， 这边 $p(x)$ 很大，$q(x)$ 很小。 $f(x)$ 好不容易终于采样到一个负的，这个负的就会被乘上一个非常大的权重，这样就可以平衡刚才那边一直采样到正的值的情况。最终我们算出这一项的期望值，终究还是负的。但前提是我们要采样足够多次，这件事情才会发生。但有可能采样次数不够多，$\mathbb{E}_{x \sim p}[f(x)]$ 与 $\mathbb{E}_{x \sim q}\left[f(x) \frac{p(x)}{q(x)}\right]$ 可能就有很大的差距。这就是重要性采样的问题。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.1.png"/>
-</div>
-<div align=center>图 5.1 重要性采样的问题</div>
+
+![5.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.1.png)
+
+图 5.1 重要性采样的问题
 
 现在要做的就是把重要性采样用在异策略的情况中，把同策略训练的算法改成异策略训练的算法。
 
@@ -3449,17 +3449,17 @@ $$
 * 如果小于 $1-\varepsilon$，输出就是 $1-\varepsilon$；
 * 如果介于 $1-\varepsilon \sim 1+\varepsilon$，输出等于输入。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.2.png"/>
-</div>
-<div align=center>图 5.2 裁剪函数</div>
+
+![5.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.2.png)
+
+图 5.2 裁剪函数
 
 
 如图 5.3a 所示，$\frac{p_{\theta}\left(a_{t} | s_{t}\right)}{p_{\theta^{k}}\left(a_{t} | s_{t}\right)}$ 是绿色的线；$\operatorname{clip}\left(\frac{p_{\theta}\left(a_{t} | s_{t}\right)}{p_{\theta^{k}}\left(a_{t} | s_{t}\right)}, 1-\varepsilon, 1+\varepsilon\right)$ 是蓝色的线；在绿色的线与蓝色的线中间，我们要取一个最小的结果。假设前面乘上的项 $A$ 大于 0，取最小的结果，就是红色的这条线。如图 5.3b 所示，如果 $A$ 小于 0 ，取最小结果的以后，就得到红色的这条线。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.3.png"/>
-</div>
+
+![5.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.3.png)
+
 
 &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp; 图 5.3 $A$对裁剪函数输出的影响
 
@@ -3474,10 +3474,10 @@ $$
 
 图 5.4 所示为 PPO 与其他算法的比较。优势演员-评论员和优势演员-评论员+信任区域（trust region）算法是基于演员-评论员的方法。PPO 算法是用紫色线表示，图 5.4 中每张子图表示某一个强化学习的任务，在多数情况中，PPO 都是不错的，即使不是最好的，也是第二好的。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.4.png"/>
-</div>
-<div align=center>图 5.4 PPO与其他算法的比较</div>
+
+![5.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch5/5.4.png)
+
+图 5.4 PPO与其他算法的比较
 
 #### 参考文献
 * [OpenAI Spinning Up ](https://spinningup.openai.com/en/latest/spinningup/rl_intro.html#)
@@ -3556,10 +3556,10 @@ $$
 
 深度Q网络 是基于价值的算法，在基于价值的算法里面，我们学习的不是策略，而是**评论员（critic）**。评论员的任务是评价现在的动作有多好或有多不好。假设有一个演员，其要学习一个策略来得到尽量高的回报。评论员就是评价演员的策略 $\pi$  好还是不好，即策略评估。例如，有一种评论员称为**状态价值函数**$V_{\pi}$。状态价值函数是指，假设演员的策略是 $\pi$，用 $\pi$  与环境交互，假设 $\pi$  看到了某一个状态 $s$，例如在玩雅达利游戏，状态 $s$ 是某一个画面，$\pi$ 看到某一个画面，接下来一直到游戏结束，期望的累积奖励有多大。如图 6.1a 所示，$V_{\pi}$ 是一个函数，输入一个状态，它会输出一个标量。这个标量代表演员的策略$\pi$ 看到状态 $s$ 的时候，预期到游戏结束的时候，它可以获得多大的奖励。例如，假设我们在玩太空侵略者，图 6.1b 所示的状态 $s$，这个游戏画面，$V_{\pi}(s)$  也许会很大，因为这时还有很多的怪兽可以击杀， 所以我们会得到很高的分数。一直到游戏结束的时候，我们仍然有很多的分数可以获得。图 6.1c 所示的情况我们得到的 $V_{\pi}(s)$ 可能就很小，因为剩下的怪兽也不多，并且红色的防护罩已经消失了，所以我们可能很快就会“死掉”。因此接下来得到预期的奖励，就不会太大。
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.1.png"/>
-</div>
-<div align=center>图 6.1 玩太空侵略者</div>
+
+![6.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.1.png)
+
+图 6.1 玩太空侵略者
 
 
 这里需要强调，评论员无法凭空评价一个状态的好坏，它所评价的是在给定某一个状态的时候，如果接下来交互的演员的策略是 $\pi$，我们会得到多少奖励，这个奖励就是我们评价得出的值。因为就算是同样的状态，接下来的 $\pi$ 不一样，得到的奖励也是不一样的。例如，在左边的情况下，假设是一个正常的 $\pi$，它可以击杀很多怪兽；假设它是一个很弱的 $\pi$，它就站在原地不动，马上就被射死了，我们得到的 $V_\pi(s)$ 还是很小。所以评论员的输出值取决于状态和演员。评论员其实都要绑定一个演员，它是在衡量某一个演员的好坏，而不是衡量一个状态的好坏。这里要强调一下，评论员的输出是与演员有关的，状态的价值其实取决于演员，当演员改变的时候，状态价值函数的输出其实也是会跟着改变的。
@@ -3567,10 +3567,10 @@ $$
 
 怎么衡量状态价值函数 $V_{\pi}(s)$ 呢？有两种不同的方法：基于蒙特卡洛的方法和基于时序差分的方法。基于蒙特卡洛的方法就是让演员与环境交互，我们要看演员好不好，就让演员与环境交互，让评论员评价。评论员就统计，演员如果看到状态 $s_a$，接下来的累积奖励有多大；如果它看到状态 $s_b$，接下来的累积奖励有多大。但是实际上，我们不可能看到所有的状态。如果我们在玩雅达利游戏，状态是图像，那么无法看到所有的状态。所以实际上 $V_{\pi}(s)$ 是一个网络。对一个网络来说，就算输入状态是从来都没有看过的，它也可以想办法估测一个值。怎么训练这个网络呢？如图 6.2 所示，如果在状态 $s_a$，接下来的累积奖励就是 $G_a$。也就是对这个价值函数，如果输入是状态 $s_a$，正确的输出应该是 $G_a$；如果输入状态是 $s_b$，正确的输出应该是 $G_b$。所以在训练的时候， 它就是一个回归问题（regression problem）。网络的输出就是一个值，我们希望在输入 $s_a$ 的时候，输出的值与 $G_a$ 越接近越好；输入 $s_b$ 的时候，输出的值与 $G_b$ 越接近越好。接下来继续训练网络，这是基于蒙特卡洛的方法。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.2.png"/>
-</div>
-<div align=center>图 6.2 基于蒙特卡洛的方法</div>
+
+![6.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.2.png)
+
+图 6.2 基于蒙特卡洛的方法
 
 
 第二个方法是**时序差分**的方法，即基于时序差分的方法。在基于蒙特卡洛的方法中，每次我们都要计算累积奖励，也就是从某一个状态 $s_a$ 一直到游戏结束的时候，得到的所有奖励的总和。如果我们要使用基于蒙特卡洛的方法，我们必须至少玩到游戏结束。但有些游戏时间非常长，我们要玩到游戏结束才能够更新网络，这花的时间太多了，因此我们会采用基于时序差分的方法。基于时序差分的方法不需要玩到游戏结束，只需要在游戏的某一个状态 $s_t$ 的时候，采取动作 $a_t$ 得到奖励$r_t$ ，接下来进入状态 $s_{t+1}$，就可以使用时序差分的方法。我们可以通过式(6.1)来使用时序差分的方法。
@@ -3581,17 +3581,17 @@ $$
 假设我们现在用的是某一个策略$\pi$，在状态 $s_t$时，它会采取动作 $a_t$，得到奖励 $r_t$ ，接下来进入 $s_{t+1}$ 。状态 $s_{t+1}$ 的值与状态 $s_t$ 的值，它们的中间差了一项 $r_t$，这是因为我们把 $s_{t+1}$ 的值加上得到的奖励 $r_t$ 就可以 得到$s_t$ 的值。有了式(6.1)，在训练的时候，我们并不是直接估测 $V_{\pi}$，而是希望得到的结果 $V_{\pi}$ 可以满足式(6.1)。我们是这样训练的，如图 6.3 所示，我们把 $s_t$ 输入网络，因为把 $s_t$ 输入网络会得到 $V_{\pi}(s_t)$，把 $s_{t+1}$ 输入网络会得到 $V_{\pi}(s_{t+1})$，$V_{\pi}(s_t)$ 减 $V_{\pi}(s_{t+1})$ 的值应该是 $r_t$。我们希望它们相减的损失与 $r_t$ 接近，训练下去，更新 $V_{\pi}$ 的参数，我们就可以把 $V_{\pi}$ 函数学习出来。
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.3.png"/>
-</div>
-<div align=center>图 6.3 基于时序差分的方法</div>
+
+![6.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.3.png)
+
+图 6.3 基于时序差分的方法
 
 蒙特卡洛方法与时序差分方法有什么差别呢？如图 6.4 所示，蒙特卡洛方法最大的问题就是方差很大。因为我们在玩游戏的时候，游戏本身是有随机性的，所以我们可以把 $G_a$ 看成一个随机变量。因为我们每次到 $s_a$ 的时候，最后得到的 $G_a$ 其实是不一样的。我们看到同样的状态 $s_a$，最后到游戏结束的时候，因为游戏本身是有随机性的，玩游戏的模型可能也有随机性，所以我们每次得到的 $G_a$ 是不一样的，每一次得到的 $G_a$ 的差别其实会很大。为什么会很大呢？因为 $G_a$ 是很多个不同的步骤的奖励的和。假设我们每一个步骤都会得到一个奖励，$G_a$ 是从状态 $s_a$ 开始一直到游戏结束，每一个步骤的奖励的和。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.4.png"/>
-</div>
-<div align=center>图 6.4 蒙特卡洛方法的问题</div>
+
+![6.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.4.png)
+
+图 6.4 蒙特卡洛方法的问题
 
 
 通过式(6.2)，我们知道 $G_a$ 的方差相较于某一个状态的奖励，它是比较大的。
@@ -3631,10 +3631,10 @@ $$
 不同的方法考虑了不同的假设，所以运算结果不同。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.6.png"/>
-</div>
-<div align=center>图 6.5 时序差分方法与蒙特卡洛方法的差别</div>
+
+![6.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.6.png)
+
+图 6.5 时序差分方法与蒙特卡洛方法的差别
 
 
 #### 6.2 动作价值函数
@@ -3651,19 +3651,19 @@ Q函数有两种写法：
 
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.7.png"/>
-</div>
-<div align=center>图 6.6 Q函数</div>
+
+![6.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.7.png)
+
+图 6.6 Q函数
 
 
 如果我们去估计Q函数，看到的结果可能如图 6.7 所示。假设我们有 3 个动作：原地不动、向上、向下。假设在第一个状态，不管采取哪个动作，最后到游戏结束的时候，得到的期望奖励都差不多。因为乒乓球在这个地方时，就算我们向下，接下来我们应该还可以接到乒乓球，所以不管采取哪个动作，都相差不了太多。假设在第二个状态，乒乓球已经反弹到很接近边缘的地方，这个时候我们采取向上的动作，才能接到乒乓球，才能得到正的奖励。如果我们站在原地不动或向下，接下来都会错过这个乒乓球，得到的奖励就会是负的。假设在第三个状态，乒乓球离我们的球拍很近了，所以就要采取向上的动作。假设在第四个状态，乒乓球被反弹回去，这时候采取哪个动作都差不多。这是动作价值函数的例子。
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.8.png"/>
-</div>
-<div align=center>图 6.7 乒乓球例子</div>
+
+![6.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.8.png)
+
+图 6.7 乒乓球例子
 
 
 虽然我们学习的Q函数只能用来评估某一个策略 $\pi$ 的好坏，但只要有了 Q函数，我们就可以进行强化学习，就可以决定要采取哪一个动作，就可以进行策略改进。如图 6.8 所示，假设我们有一个初始的演员，也许一开始很差，随机的也没有关系。初始的演员称为 $\pi$，$\pi$ 与环境交互，会收集数据。接下来我们学习策略 $\pi$的 Q 值，去衡量一下 $\pi$ 在某一个状态强制采取某一个动作，接下来会得到的期望奖励，用时序差分方法或蒙特卡洛方法都是可以的。我们学习出一个Q函数以后，就可以找到一个新的策略 $\pi'$ ，策略$\pi'$ 会比原来的策略 $\pi$ 要好（稍后会定义什么是好）。所以假设我们有一个Q函数和某一个策略 $\pi$，根据策略 $\pi$ 学习出策略 $\pi$ 的Q函数，接下来可以找到一个新的策略  $\pi'$，它会比 $\pi$ 要好。我们用 $\pi'$ 取代 $\pi$，再去学习它的 Q 函数，得到新的Q函数以后，再去寻找一个更好的策略。这样一直循环下去，策略就会越来越好。 
@@ -3677,10 +3677,10 @@ $$
 $\pi'$ 一定比 $\pi$ 好。假设我们已经学习出 $\pi$ 的Q函数，在某一个状态 $s$，把所有可能的动作 $a$ 一一代入 Q 函数，看看哪一个 $a$ 可以让Q函数的值最大，这个动作就是 $\pi'$ 会采取的动作。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.9.png"/>
-</div>
-<div align=center>图 6.8 使用Q函数进行策略改进</div>
+
+![6.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.9.png)
+
+图 6.8 使用Q函数进行策略改进
 
 
 这里要注意，给定状态 $s$ 和策略 $\pi$  并不一定会采取动作 $a$。给定某一个状态 $s$ 强制采取动作 $a$，用 $\pi$  继续交互得到的期望奖励，这才是Q函数的定义。所以在状态 $s$ 下不一定会采取动作 $a$。用 $\pi'$ 在状态 $s$ 采取动作 $a$ 与用 $\pi$ 采取的动作不一定是一样的，$\pi'$ 所采取的动作会让它得到比较大的奖励。所以 $\pi'$ 是用Q函数推出来的，没有另外一个网络决定 $\pi'$ 怎么与环境交互，有Q函数 就可以找出 $\pi'$。但是在这里要解决一个 arg max 操作的问题，如果 $a$ 是离散的，如$a$ 只有 3 个选项，将每个动作都代入Q函数，看哪个动作的 Q 值最大，这没有问题。但如果 $a$ 是连续的，我们要解决 arg max 操作问题，就不可行。
@@ -3774,18 +3774,18 @@ $$
 在实现的时候，我们会把左边的 Q 网络更新多次，再用更新过的 Q 网络替换目标网络。但这两个网络不要一起更新，一起更新，结果会很容易不好。一开始这两个网络是一样的，在训练的时候，我们会把右边的 Q 网络固定住，在做梯度下降的时候，只调整左边Q网络的参数。我们可能更新 100 次以后才把参数复制到右边的网络中，把右边网络的参数覆盖，目标值就变了。就好像我们本来在做一个回归问题，训练后把这个回归问题的损失降下去以后，接下来我们把左边网络的参数复制到右边网络，目标值就变了，接下来就要重新训练。
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.12.png"/>
-</div>
-<div align=center>图 6.9 目标网络</div>
+
+![6.12](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.12.png)
+
+图 6.9 目标网络
 
 
 如图 6.10a 所示，我们可以通过猫追老鼠的例子来直观地理解固定目标网络的目的。猫是 Q 估计，老鼠是 Q 目标。一开始，猫离老鼠很远，所以我们想让猫追上老鼠。如图 6.10b 所示，因为 Q 目标也是与模型参数相关的，所以每次优化后，Q 目标也会动。这就导致一个问题，猫和老鼠都在动。如图 6.10c 所示，猫和老鼠会在优化空间里面到处乱动，这会产生非常奇怪的优化轨迹，使得训练过程十分不稳定。所以我们可以固定 Q 网络，让老鼠动得不那么频繁，可能让它每 5 步动一次，猫则是每一步都在动。如果老鼠每 5 次动一步，猫就有足够的时间来接近老鼠，它们之间的距离会随着优化过程越来越小，最后它们就可以拟合，拟合后就可以得到一个最好的Q 网络。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.10.png"/>
-</div>
-<div align=center>图 6.10 固定目标网络</div>
+
+![6.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.10.png)
+
+图 6.10 固定目标网络
 
 
 #### 6.4 探索
@@ -3805,10 +3805,10 @@ $$
 
 但是如图 6.11 所示，假设我们在状态 $s$采取动作 $a_{2}$ ，它得到的值是正的奖励，$Q(s, a_2)$ 就会比其他动作的Q值要大。在采取动作的时候，谁的 Q 值 最大就采取谁，所以之后永远都只会采取 $a_{2}$，其他的动作就再也不会被采取了，这就会有问题。比如我们去一个餐厅吃饭。假设我们点了某一样菜，比如椒麻鸡，我们觉得还可以。接下来我们每次去就都会点椒麻鸡，再也不点别的菜了，那我们就不知道别的菜是不是会比椒麻鸡好吃，这是一样的问题。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.16.png"/>
-</div>
-<div align=center>图 6.11 探索</div>
+
+![6.16](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.16.png)
+
+图 6.11 探索
 
 
 如果我们没有好的探索，在训练的时候就会遇到这种问题。例如， 假设我们用 深度Q网络 来玩 slither.io 网页游戏。 我们有一条蛇，它在环境里面走来走去，吃到星星，就加分。假设游戏一开始，蛇往上走，然后吃到星星，就可以得到分数，它就知道往上走可以得到奖励。接下来它就再也不会采取往上走以外的动作了，以后就会变成每次游戏一开始，它就往上走，然后游戏结束。所以需要有探索的机制，让智能体知道，虽然根据之前采样的结果，$a_2$ 好像是不错的，但我们至少偶尔也试一下 $a_{1}$ 与 $a_{3}$，说不定它们更好。
@@ -3837,10 +3837,10 @@ $$
 回放缓冲区里面的经验可能来自不同的策略，我们每次用 $\pi$ 与环境交互的时候，可能只交互 10000 次，接下来我们就更新 $\pi$ 了。但是回放缓冲区里面可以放 5 万笔数据，所以 5 万笔数据可能来自不同的策略。回放缓冲区只有在它装满的时候，才会把旧的数据丢掉。所以回放缓冲区里面其实装了很多不同的策略的经验。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.17.png"/>
-</div>
-<div align=center>图 6.12 经验回放</div>
+
+![6.17](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.17.png)
+
+图 6.12 经验回放
 
 
 如图 6.13 所示，有了回放缓冲区以后，我们怎么训练 Q 模型、怎么估 Q 函数呢？我们会迭代地训练 Q 函数，在每次迭代里面，从回放缓冲区中随机挑一个批量（batch）出来，即与一般的网络训练一样，从训练集里面挑一个批量出来。我们采样该批量出来，里面有一些经验，我们根据这些经验去更新Q函数。这与时序差分学习要有一个目标网络是一样的。我们采样一个批量的数据，得到一些经验，再去更新 Q 函数。
@@ -3848,10 +3848,10 @@ $$
 如果某个算法使用了经验回放这个技巧，该算法就变成了一个异策略的算法。因为本来 Q 是要观察 $\pi$ 的经验的，但实际上存储在回放缓冲区里面的这些经验不是通通来自于 $\pi$，有些是过去其他的策略所留下来的经验。因为我们不会用某一个 $\pi$ 就把整个回放缓冲区装满，拿去测Q函数，$\pi$ 只是采样一些数据放到回放缓冲区里面，接下来就让 Q 去训练。所以 Q 在采样的时候， 它会采样到过去的一些数据。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.18.png"/>
-</div>
-<div align=center>图 6.13 使用回放缓冲区训练Q函数</div>
+
+![6.18](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.18.png)
+
+图 6.13 使用回放缓冲区训练Q函数
 
 
 这么做有两个好处。第一个好处是，在进行强化学习的时候， 往往最花时间的步骤是与环境交互，训练网络反而是比较快的。因为我们用 GPU 训练其实很快，真正花时间的往往是与环境交互。用回放缓冲区可以减少与环境交互的次数，因为在做训练的时候，经验不需要通通来自于某一个策略。一些过去的策略所得到的经验可以放在回放缓冲区里面被使用很多次，被反复的再利用，这样可以比较高效地采样经验。第二个好处是，在训练网络的时候，其实我们希望一个批量里面的数据越多样（diverse）越好。如果批量里面的数据都是同样性质的，我们训练下去，训练结果是容易不好的。如果批量里面都是一样的数据，训练的时候，性能会比较差。我们希望批量里的数据越多样越好。如果回放缓冲区里面的经验通通来自于不同的策略，我们采样到的一个批量里面的数据会是比较多样的。
@@ -3871,10 +3871,10 @@ $$
 其中，$a$ 是让 $\hat{Q}$ 值最大的动作。因为我们在状态 $s_{i+1}$会采取的动作 $a$ 就是可以让 $\hat{Q}$值最大的那一个动作。接下来我们要更新 Q 值，就把它当作一个回归问题。我们希望 $Q(s_i,a_i)$  与目标越接近越好。假设已经更新了一定的次数，比如 $C$ 次，设 $C = 100$， 那我们就把 $\hat{Q}$ 设成 $Q$，这就是 深度Q网络 算法。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.19.png"/>
-</div>
-<div align=center>图 6.14 深度Q网络算法</div>
+
+![6.19](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch6/6.19.png)
+
+图 6.14 深度Q网络算法
     
 
 Q：深度Q网络 和 Q学习 有什么不同？
@@ -4003,10 +4003,10 @@ A：整体来说，深度Q网络与Q学习的目标价值以及价值的更新�
 本章我们介绍训练深度Q网络的一些技巧。第一个技巧是**双深度Q网络（double DQN，DDQN）**。为什么要有DDQN呢？因为在实现上，Q 值往往是被高估的。如图 7.1 所示，这里有 4 个不同的小游戏，横轴代表迭代轮次，红色锯齿状的一直在变的线表示Q函数对不同的状态估计的平均 Q 值，有很多不同的状态，每个状态我们都进行采样，算出它们的 Q 值，然后进行平均。这条红色锯齿状的线在训练的过程中会改变，但它是不断上升的。因为Q函数是取决于策略的，在学习的过程中策略越来越强，我们得到的 Q 值会越来越大。在同一个状态， 我们得到奖励的期望会越来越大，所以一般而言，Q值都是上升的，但这是深度Q网络预估出来的值。接下来我们就用策略去玩游戏，玩很多次，比如100万次，然后计算在某一个状态下，我们得到的 Q 值是多少。我们会得到在某一个状态采取某一个动作的累积奖励是多少。预估出来的值远比真实值大，且大很多，在每一个游戏中都是这样。所以DDQN的方法可以让预估值与真实值比较接近。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.1.png"/>
-</div>
-<div align=center>图 7.1 被高估的Q值</div>
+
+![7.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.1.png)
+
+图 7.1 被高估的Q值
 
 
 图 7.1 中蓝色的锯齿状的线是 DDQN 的Q网络所估测出来的 Q 值，蓝色的无锯齿状的线是真正的 Q 值，它们是比较接近的。我们不用管用网络估测的值，它比较没有参考价值。我们用DDQN得出的真正的Q值在图 7.1 的3 种情况下都是比原来的深度Q网络高的，代表DDQN学习出来的策略比较强，所以实际上得到的奖励是比较大的。虽然一般的 深度Q网络 的 Q网络高估了自己会得到的奖励，但实际上它得到的奖励是比较低的。
@@ -4023,10 +4023,10 @@ $$
 例如，假设我们现在有 4 个动作，本来它们得到的Q值都是差不多的，它们得到的奖励也是差不多的。但是在估计的时候，网络是有误差的。如图 7.2（a）所示，假设是第一个动作被高估了，绿色代表是被高估的量，智能体就会选这个动作，就会选这个高估的 Q 值来加上 $r_t$ 来当作目标。如图 7.2（b）所示，如果第四个动作被高估了，智能体就会选第四个动作来加上 $r_t$ 当作目标。所以智能体总是会选那个 Q 值被高估的动作，总是会选奖励被高估的动作的Q值当作最大的结果去加上 $r_t$ 当作目标，所以目标值总是太大。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.2.png"/>
-</div>
-<div align=center>图 7.2 Q值被高估的问题</div>
+
+![7.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.2.png)
+
+图 7.2 Q值被高估的问题
 
 
 
@@ -4049,10 +4049,10 @@ DDQN相较于原来的深度Q网络的更改是最少的，它几乎没有增加
 
 
 ​    
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.4.png"/>
-</div>
-<div align=center>图 7.3 竞争深度Q网络的网络结构</div>
+
+![7.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.4.png)
+
+图 7.3 竞争深度Q网络的网络结构
 
 
 
@@ -4068,10 +4068,10 @@ $$
 
 
 ​    
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.5.png"/>
-</div>
-<div align=center>图 7.4 竞争深度Q网络训练</div>
+
+![7.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.5.png)
+
+图 7.4 竞争深度Q网络训练
 
 
 
@@ -4092,10 +4092,10 @@ $$
 接着我们将向量$[3,-1,2]^{\mathrm{T}}$中的每个元素的值加上 1，就可以得到最后的 Q 值。这个零均值化的步骤就是网络的其中一部分，在训练的时候，我们也使用反向传播，只是零均值化是没有参数的，它只是一个操作，可以把它放到网络里面，与网络的其他部分共同训练，这样$\boldsymbol{A}(\boldsymbol{s},\boldsymbol{a})$就会有比较大的约束，网络就会给它一些好处，让它倾向于去更新$V(\boldsymbol{s})$的值，这就是竞争深度Q网络。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.6.png"/>
-</div>
-<div align=center>图 7.5 竞争深度Q网络约束</div>
+
+![7.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.6.png)
+
+图 7.5 竞争深度Q网络约束
 
 
 
@@ -4103,10 +4103,10 @@ $$
 
 第三个技巧称为**优先级经验回放（prioritized experience replay，PER）**。如图 7.6 所示，我们原来在采样数据训练 Q 网络的时候，会均匀地从回放缓冲区里面采样数据。这样不一定是最好的， 因为也许有一些数据比较重要。假设有一些数据，我们之前采样过，发现这些数据的时序差分误差特别大（时序差分误差就是网络的输出与目标之间的差距），这代表我们在训练网络的时候，这些数据是比较不好训练的。既然比较不好训练，就应该给它们比较大的概率被采样到，即给它**优先权（priority）**。这样在训练的时候才会多考虑那些不好训练的数据。实际上在做 PER 的时候，我们不仅会更改采样的过程，还会因为更改了采样的过程，而更改更新参数的方法。所以PER不仅改变了采样数据的分布，还改变了训练过程。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.7.png"/>
-</div>
-<div align=center>图 7.6 优先级经验回放</div>
+
+![7.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.7.png)
+
+图 7.6 优先级经验回放
 
 
 
@@ -4117,10 +4117,10 @@ $$
 
 多步方法就是蒙特卡洛方法与时序差分方法的结合，因此它不仅有蒙特卡洛方法的好处与坏处，还有时序差分方法的好处与坏处。我们先看看多步方法的好处，之前只采样了某一个步骤，所以得到的数据是真实的，接下来都是 Q 值估测出来的。现在采样比较多的步骤，采样 $N$ 个步骤才估测值，所以估测的部分所造成的影响就会比较小。当然多步方法的坏处就与蒙特卡洛方法的坏处一样，因为 $r$ 有比较多项，所以我们把 $N$ 项的 $r$ 加起来，方差就会比较大。但是我们可以调整 $N$ 的值，在方差与不精确的 Q 值之间取得一个平衡。$N$ 就是一个超参数，我们可以对其进行调整。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.8.png"/>
-</div>
-<div align=center>图 7.7 在蒙特卡洛方法和时序差分方法中取得平衡</div>
+
+![7.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.8.png)
+
+图 7.7 在蒙特卡洛方法和时序差分方法中取得平衡
 
 
 #### 7.5 噪声网络
@@ -4140,19 +4140,19 @@ $$
 
 
 ​    
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.11.png"/>
-</div>
-<div align=center>图 7.8 奖励分布</div>
+
+![7.11](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.11.png)
+
+图 7.8 奖励分布
 
 
 
 分布式Q函数是对分布（distribution）建模，怎么做呢？如图 7.12a 所示，在原来的Q函数里面，假设我们只能采取 $a_1$、$a_2$、$a_3$ 这3 个动作，我们输入一个状态，输出 3 个值。这3 个值分别代表 3 个动作的 Q 值，但是这些 Q 值是一个分布的期望值。所以分布式Q函数就是直接输出分布。实际上的做法如图 7.12b 所示，假设分布的值就分布在某一个范围里面，比如 $-$10 ~ 10，把 $-$10 ~ 10 拆成一个一个的长条。例如，每一个动作的奖励空间拆成 5 个长条。假设奖励空间可以拆成 5 个长条，Q函数的输出就是要预测我们在某一个状态采取某一个动作得到的奖励，其落在某一个长条里面的概率。所以绿色长条概率的和应该是 1，其高度代表在某一个状态采取某一个动作的时候，它落在某一个长条内的概率。绿色的代表动作 $a_1$，红色的代表动作 $a_2$，蓝色的代表动作 $a_3$。所以我们就可以用Q函数去估计 $a_1$ 的分布、$a_2$ 的分布、$a_3$ 的分布。实际上在做测试的时候，我们选平均值最大的动作执行。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.12.png"/>
-</div>
-<div align=center>图 7.12 分布式Q函数</div>
+
+![7.12](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.12.png)
+
+图 7.12 分布式Q函数
 
 
 除了选平均值最大的动作以外，我们还可以对分布建模。例如，我们可以考虑动作的分布，如果分布方差很大，这代表采取这个动作虽然平均而言很不错，但也许风险很高，我们可以训练一个网络来规避风险。在两个动作平均值都差不多的情况下，也许可以选一个风险比较小的动作来执行，这就是分布式Q函数的好处。
@@ -4163,10 +4163,10 @@ $$
 
 
 ​    
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.13.png"/>
-</div>
-<div align=center>图 7.10 彩虹方法</div>
+
+![7.13](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.13.png)
+
+图 7.10 彩虹方法
 
 
 
@@ -4176,10 +4176,10 @@ $$
 为什么分布式深度Q网络不会高估奖励奖励，反而会低估奖励呢？因为分布式深度Q网络输出的是一个分布的范围，输出的范围不可能是无限的，我们一定会设一个限制， 比如最大输出范围就是从 $-$10 ~ 10。假设得到的奖励超过 10，比如 100 怎么办？我们就当作没看到这件事，所以奖励很极端的值、很大的值是会被丢弃的，用分布式深度Q网络的时候，我们不会高估奖励，反而会低估奖励。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.14.png"/>
-</div>
-<div align=center>图 7.11 彩虹：去掉其中一种方法</div>
+
+![7.14](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch7/7.14.png)
+
+图 7.11 彩虹：去掉其中一种方法
 
 ### 第 7 章习题与关键词
 
@@ -4355,20 +4355,20 @@ $$
     
 >如果 $n$阶对称矩阵$\boldsymbol{A}$ 对于任意非零的$n$维向量$\boldsymbol{x}$都有 $\boldsymbol{x}^\mathrm{T}\boldsymbol{A}\boldsymbol{x}>0$，则称矩阵$\boldsymbol{A}$为正定矩阵。  
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch8/8.2.png"/>
-</div>
-<div align=center>图 8.1 方案 3：设计网络架构</div>
+
+![8.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch8/8.2.png)
+
+图 8.1 方案 3：设计网络架构
 
 #### 8.4 方案 4：不使用深度Q网络
 
 第4个方案就是不使用深度Q网络，用深度Q网络处理连续动作是比较麻烦的。如图 8.2 所示，我们将基于策略的方法————PPO 和基于价值的方法————深度Q网络结合在一起，就可以得到演员-评论员的方法。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch8/8.3.png"/>
-</div>
-<div align=center>图 8.2 方案 4：不使用深度Q网络</div>
+
+![8.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch8/8.3.png)
+
+图 8.2 方案 4：不使用深度Q网络
 
 ### 第 8 章习题与关键词
 
@@ -4414,10 +4414,10 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/5706e9cbb7554d04a70614ea0e79372727abad72c9ae40dba1190b958fb8900e"/>
-</div>
- <div align=center>图 9.1 策略梯度回顾</div>
+ 
+![5706e9cbb7554d04a70614ea0e79372727abad72c9ae40dba1190b958fb8900e](https://ai-studio-static-online.cdn.bcebos.com/5706e9cbb7554d04a70614ea0e79372727abad72c9ae40dba1190b958fb8900e)
+
+ 图 9.1 策略梯度回顾
 
 #### 9.2 深度Q网络回顾
 
@@ -4430,10 +4430,10 @@ Q：怎么使用期望值代替采样的值呢？
 A：这里就需要引入基于价值的（value-based）的方法。基于价值的方法就是 深度Q网络 。深度Q网络 有两种函数，有两种评论员。如图 9.2 所示，第一种评论员是 $V_{\pi}(s)$。即假设演员的策略是 $\pi$，使用 $\pi$ 与环境交互，当智能体看到状态 $s$ 时，接下来累积奖励的期望值是多少。第二种评论员是 $Q_{\pi}(s,a)$。$Q_{\pi}(s,a)$ 把 $s$ 与 $a$ 当作输入，它表示在状态 $s$ 采取动作 $a$，接下来用策略 $\pi$ 与环境交互，累积奖励的期望值是多少。$V_{\pi}$ 接收输入 $s$，输出一个标量。$Q_{\pi}$ 接收输入 $s$，它会给每一个 $a$ 都分配一个 Q值。
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/393de13e995546ab9d00c0247eff6e78e9dcd58bb97d4430a8baed2d9081fecf"/>
-</div>
- <div align=center>图 9.2 深度Q网络</div>
+ 
+![393de13e995546ab9d00c0247eff6e78e9dcd58bb97d4430a8baed2d9081fecf](https://ai-studio-static-online.cdn.bcebos.com/393de13e995546ab9d00c0247eff6e78e9dcd58bb97d4430a8baed2d9081fecf)
+
+ 图 9.2 深度Q网络
 
 
 #### 9.3 优势演员-评论员算法
@@ -4447,10 +4447,10 @@ $$
 $V_{\pi_{\theta}}\left(s_{t}^{n}\right)$ 是 $Q_{\pi_{\theta}}\left(s_{t}^{n}, a_{t}^{n}\right)$ 的期望值， $Q_{\pi_{\theta}}\left(s_{t}^{n}, a_{t}^{n}\right)-V_{\pi_{\theta}}\left(s_{t}^{n}\right)$ 会有正有负，所以 $\sum_{t^{\prime}=t}^{T_{n}} \gamma^{t^{\prime}-t} r_{t^{\prime}}^{n}-b$ 这一项就会有正有负。所以我们就把策略梯度里面 $\sum_{t^{\prime}=t}^{T_{n}} \gamma^{t^{\prime}-t} r_{t^{\prime}}^{n}-b$ 这一项换成了优势函数$A^{\theta}\left(s^{n}_{t}, a^{n}_{t}\right)$，即 $Q_{\pi_{\theta}}\left(s_{t}^{n}, a_{t}^{n}\right)-V_{\pi_{\theta}}\left(s_{t}^{n}\right)$。因此该算法称为优势演员-评论员算法。
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/d02364e1abb64a3db51e2e6cbef2322f4497a4eda56d47a3911a0ba517461800"/>
-</div>
- <div align=center>图 9.3 优势演员-评论员算法</div>
+ 
+![d02364e1abb64a3db51e2e6cbef2322f4497a4eda56d47a3911a0ba517461800](https://ai-studio-static-online.cdn.bcebos.com/d02364e1abb64a3db51e2e6cbef2322f4497a4eda56d47a3911a0ba517461800)
+
+ 图 9.3 优势演员-评论员算法
 
 
 如果我们这么实现，有一个缺点，即我们需要估计两个网络————Q网络和 V网络，估计不准的风险就变成原来的两倍。所以我们何不只估计一个网络呢？事实上，在演员-评论员算法中，我们可以只估计网络 V，并利用 $V$ 的值来表示 $Q$ 的值，$Q_{\pi}\left(s_{t}^{n}, a_{t}^{n}\right)$ 可以写成 $ r_{t}^{n}+V_{\pi}\left(s_{t+1}^{n}\right)$ 的期望值，即
@@ -4481,20 +4481,20 @@ $$
 有了新的 $\pi$ 以后，再与环境交互，收集新的资料，去估计价值函数。再用新的价值函数更新策略，更新演员。整个优势演员-评论员算法就是这么运作的。
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/a6096d7cce50414ebc574bccf88630900f7afcf0212e4f96bf675b817e7ec252"/>
-</div>
- <div align=center>图 9.4 优势评论员-评论员算法流程</div>
+ 
+![a6096d7cce50414ebc574bccf88630900f7afcf0212e4f96bf675b817e7ec252](https://ai-studio-static-online.cdn.bcebos.com/a6096d7cce50414ebc574bccf88630900f7afcf0212e4f96bf675b817e7ec252)
+
+ 图 9.4 优势评论员-评论员算法流程
 
 
 实现优势演员-评论员算法的时候，有两个一定会用到的技巧。第一个技巧是，我们需要估计两个网络：$V$ 网络和策略的网络（也就是演员）。评论员网络 $V_\pi(s)$ 接收一个状态，输出一个标量。演员的策略 $\pi(s)$ 接收一个状态，如果动作是离散的，输出就是一个动作的分布。如果动作是连续的，输出就是一个连续的向量。
 
 图 9.5 所示为离散动作的例子，连续动作的情况也是一样的。输入一个状态，网络决定现在要采取哪一个动作。演员网络和评论员网络的输入都是 $s$，所以它们前面几个层（layer）是可以共享的。
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/d39a829f7e844f03aceb4243c50cb5822811cd85180c4662a77b715fde2f620f"/>
-</div>
- <div align=center>图 9.5 离散动作的例子</div>
+ 
+![d39a829f7e844f03aceb4243c50cb5822811cd85180c4662a77b715fde2f620f](https://ai-studio-static-online.cdn.bcebos.com/d39a829f7e844f03aceb4243c50cb5822811cd85180c4662a77b715fde2f620f)
+
+ 图 9.5 离散动作的例子
 
 
 尤其当我们在玩雅达利游戏时，输入都是图像。输入的图像非常复杂，通常我们在前期都会用一些卷积神经网络来处理它们，把图像抽象成高级（high level）的信息。把像素级别的信息抽象成高级信息的特征提取器，对于演员与评论员来说是可以共用的。所以通常我们会让演员与评论员共享前面几层，并且共用同一组参数，这一组参数大部分都是卷积神经网络的参数。先把输入的像素变成比较高级的信息，再让演员决定要采取什么样的动作，让评论员即价值函数计算期望奖励。
@@ -4505,10 +4505,10 @@ $$
 强化学习有一个问题，就是它很慢，怎么提高训练的速度呢？例如，如图 9.6 所示，在动漫《火影忍者》中，有一次鸣人想要在一周之内打败晓，所以要加快修行的速度，鸣人的老师就教他一个方法：用影分身进行同样的修行。两个一起修行，经验值累积的速度就会变成两倍，所以鸣人就使用了 1000 个影分身来进行修行。这就是异步优势演员-评论员算法的体现。
 
 
-   <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/496461ab4b19443197b24664ce9382aebc0f59a7f14442d4b4e841aaa4cf9531"/>
-</div>
-   <div align=center>图 9.6 影分身例子</div>
+   
+![496461ab4b19443197b24664ce9382aebc0f59a7f14442d4b4e841aaa4cf9531](https://ai-studio-static-online.cdn.bcebos.com/496461ab4b19443197b24664ce9382aebc0f59a7f14442d4b4e841aaa4cf9531)
+
+   图 9.6 影分身例子
 
 
 异步优势演员-评论员算法同时使用很多个进程（worker），每一个进程就像一个影分身，最后这些影分身会把所有的经验值集合在一起。如果我们没有很多 CPU，不好实现异步优势演员-评论员算法，但可以实现优势演员-评论员算法。
@@ -4519,10 +4519,10 @@ $$
  注意，A3C使用了平行探索的方法，所有的演员都是平行跑的，每一个演员各做各的，不管彼此。所以每个演员都是去要了一个参数以后，做完就把参数传回去。当第一个进程做完想要把参数传回去的时候，本来它要的参数是 $\theta_1$，等它要把梯度传回去的时候，可能别人已经把原来的参数覆盖掉，变成 $\theta_2$了。但是没有关系，它一样会把这个梯度就覆盖过去。
 
 
-<div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/c36501bcb3ad49c1be3c0486665f6d096e67c00b6d4142a9a00231ae8f299c56"/>
-</div>
-<div align=center>图 9.7 异步优势演员-评论员算法的运作流程</div>
+
+![c36501bcb3ad49c1be3c0486665f6d096e67c00b6d4142a9a00231ae8f299c56](https://ai-studio-static-online.cdn.bcebos.com/c36501bcb3ad49c1be3c0486665f6d096e67c00b6d4142a9a00231ae8f299c56)
+
+图 9.7 异步优势演员-评论员算法的运作流程
 
 
 #### 9.5 路径衍生策略梯度
@@ -4540,27 +4540,27 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/a782c1f5f1204beaa8f1083d25e8fc097d79a15a179d486994827d9b994fa546"/>
-</div>
- <div align=center>图 9.8 路径衍生策略梯度</div>
+ 
+![a782c1f5f1204beaa8f1083d25e8fc097d79a15a179d486994827d9b994fa546](https://ai-studio-static-online.cdn.bcebos.com/a782c1f5f1204beaa8f1083d25e8fc097d79a15a179d486994827d9b994fa546)
+
+ 图 9.8 路径衍生策略梯度
 
 
 
 我们来看一下路径衍生策略梯度算法。如图 9.9 所示，一开始会有一个策略 $\pi$，它与环境交互并估计 Q 值。估计完 Q 值以后，我们就把 Q 值固定，只去学习一个演员。假设这个 Q 值估得很准，它知道在某一个状态采取什么样的动作会得到很大的Q值。接下来就学习这个演员，演员在给定 $s$ 的时候，采取了 $a$，可以让最后Q函数算出来的值越大越好。我们用准则（criteria）去更新策略 $\pi$，用新的 $\pi$ 与环境交互，再估计 Q值，得到新的 $\pi$ 去最大化 Q值的输出。深度Q网络 里面的技巧，在这里也几乎都用得上，比如经验回放、探索等技巧。
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/529577a994a6499698a0e51c2ee470836b5d4d2ffccf4e40b4d760babe331944"/>
-</div>
- <div align=center>图 9.9 路径衍生策略梯度算法</div>
+ 
+![529577a994a6499698a0e51c2ee470836b5d4d2ffccf4e40b4d760babe331944](https://ai-studio-static-online.cdn.bcebos.com/529577a994a6499698a0e51c2ee470836b5d4d2ffccf4e40b4d760babe331944)
+
+ 图 9.9 路径衍生策略梯度算法
 
 
 图 9.10 所示为原来深度Q网络的算法。我们有一个Q函数 $Q$ 和另外一个目标Q函数 $\hat{Q}$。每一次训练，在每一个回合的每一个时间点，我们会看到一个状态 $s_t$，会采取某一个动作 $a_{t}$。至于采取哪一个动作是由Q函数所决定的。如果是离散动作，我们看哪一个动作 $a$ 可以让 Q 值最大，就采取哪一个动作。当然，我们需要加一些探索，这样表现才会好。我们会得到奖励 $r_t$，进入新的状态 $s_{t+1}$，然后把 $(s_t$,$a_{t}$,$r_t$,$s_{t+1})$ 放到回放缓冲区里。接下来，我们会从回放缓冲区中采样一个批量的数据，在这个批量数据里面，可能某一笔数据是 $(s_i, a_i, r_i, s_{i+1})$。接下来我们会算一个目标 $y$ ，$y=r_{i}+\max _{a} \hat{Q}\left(s_{i+1}, a\right)$。怎么学习 Q 呢？我们希望 $Q(s_i,a_i)$ 与 $y$ 越接近越好，这是一个回归问题，最后每 $C$ 步，要用 $Q$ 替代 $\hat{Q}$ 。
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/37f81d6827aa4996884c822f236643255da2f11fa724491bb1cd272a80e7c318"/>
-</div>
- <div align=center>图 9.10 深度Q网络算法</div>
+ 
+![37f81d6827aa4996884c822f236643255da2f11fa724491bb1cd272a80e7c318](https://ai-studio-static-online.cdn.bcebos.com/37f81d6827aa4996884c822f236643255da2f11fa724491bb1cd272a80e7c318)
+
+ 图 9.10 深度Q网络算法
 
 
  接下来我们把深度Q网络 改成路径衍生策略梯度，需要做4个改变，如图 9.11 所示。
@@ -4579,10 +4579,10 @@ $$
 
 
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/f3bbec118f5f4e0bb2774cff3111a6c44aae3e670f51406296e6884d92913bcf"/>
-</div>
- <div align=center>图 9.11 从深度Q网络到路径衍生策略梯度</div>
+ 
+![f3bbec118f5f4e0bb2774cff3111a6c44aae3e670f51406296e6884d92913bcf](https://ai-studio-static-online.cdn.bcebos.com/f3bbec118f5f4e0bb2774cff3111a6c44aae3e670f51406296e6884d92913bcf)
+
+ 图 9.11 从深度Q网络到路径衍生策略梯度
 
 
 #### 9.6 与生成对抗网络的联系
@@ -4591,11 +4591,10 @@ $$
 
 生成对抗网络与演员-评论员都挺难训练，所以在文献上就有各式各样的方法，告诉我们怎么样可以训练 生成对抗网络。知道生成对抗网络与演员-评论员非常相似后，我们就可以知道怎样训练演员-评论员。但是因为做 生成对抗网络 与演员-评论员的人是两群人，所以这篇论文里面就列出说在生成对抗网络上面有哪些技术是有人做过的，在演员-评论员上面，有哪些技术是有人做过的。也许训练 生成对抗网络 的技术，我们可以试着应用在演员-评论员上，在演员-评论员上用过的技术，也可以试着应用在生成对抗网络上。
 
-<div align=center>表 9.1 与生成对抗网络的联系</div>
+表 9.1 与生成对抗网络的联系
 
- <div align=center>
-<img width="550" src="https://ai-studio-static-online.cdn.bcebos.com/818c1c2e603341f881dd57fb59e109c81702722156be4e6481b276b894c51290"/>
-</div>
+ 
+![818c1c2e603341f881dd57fb59e109c81702722156be4e6481b276b894c51290](https://ai-studio-static-online.cdn.bcebos.com/818c1c2e603341f881dd57fb59e109c81702722156be4e6481b276b894c51290)
 
 ### 第 9 章习题与关键词
 
@@ -4710,10 +4709,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.1.png"/>
-</div>
-<div align=center>图 10.1 设计奖励</div>
+
+![10.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.1.png)
+
+图 10.1 设计奖励
     
 
 
@@ -4721,10 +4720,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 设计奖励是有问题的，因为我们需要领域知识（domain knowledge）。例如，如图 10.2 所示，机器人想要学会把蓝色的板子从柱子穿过。机器人很难学会，我们可以设计奖励。一个貌似合理的说法是，蓝色的板子离柱子越近，奖励越大。但是机器人靠近的方式会有问题，它会用蓝色的板子打柱子。而机器人要把蓝色板子放在柱子上面，才能让蓝色板子穿过柱子。因此，这种设计奖励的方式是有问题的。至于哪种设计奖励的方式有问题，哪种设计奖励的方式没问题，会变成一个领域知识，是我们要去调整的。
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.2.png"/>
-</div>
-<div align=center>图 10.2 设计奖励的问题</div>
+
+![10.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.2.png)
+
+图 10.2 设计奖励的问题
     
 #### 10.2 好奇心
 
@@ -4732,10 +4731,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 在好奇心驱动的技术里面，我们会加上一个新的奖励函数------**内在好奇心模块（intrinsic curiosity module，ICM）**，它用于给智能体加上好奇心。内在好奇心模块需要 3 个输入：状态$s_1$、动作 $a_1$ 和状态$s_2$。根据输入，它会输出另外一个奖励$r_1^i$。对智能体来说，总奖励并不是只有 $r$，还有 $r^i$。它不是只把所有的 $r$ 都加起来，它还把所有 $r^i$ 加起来当作总奖励。所以在与环境交互的时候，它不是只希望 $r$ 越大越好，它还同时希望 $r^i$ 越大越好，它希望从内在好奇心模块里面得到的奖励越大越好。内在好奇心模块代表一种好奇心。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.3.png"/>
-</div>
-<div align=center>图 10.3 好奇心</div>
+
+![10.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.3.png)
+
+图 10.3 好奇心
 
 
 怎么设计内在好奇心模块？最原始的设计如图 10.4 所示，内在好奇心模块的输入是现在的状态$s_t$、在这个状态采取的动作$a_t$以及下一个状态$s_{t+1}$，输出一个奖励$r^i_t$。那么 $r^i_t$  是怎么算出来的呢？在内在好奇心模块里面，我们有一个网络，这个网络会接收输入$a_t$ 与$s_t$，输出 $\hat{s}_{t+1}$，也就是这个网络根据 $a_t$ 和 $s_t$ 去预测  $\hat{s}_{t+1}$ 。然后再看这个网络的预测  $\hat{s}_{t+1}$ 与真实的情况 $s_{t+1}$ 的相似度，越不相似得到的奖励就越大。所以奖励$r_t^i$ 的意思是，未来的状态越难被预测，得到的奖励就越大。这就是鼓励智能体去冒险、去探索，现在采取这个动作，未来会发生什么越难被预测，这个动作的奖励就越大。所以如果有这样的内在好奇心模块，智能体就会倾向于采取一些风险比较大的动作，它想要去探索未知的世界。假设某一个状态是它没有办法预测的，它就会特别想要接近该状态，这可以提高智能体探索的能力。
@@ -4743,10 +4742,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 网络 1 是另外训练出来的。训练的时候，我们会给网络 1 输入$a_t$、 $s_t$、 $s_{t+1}$，让网络 1 学习根据给定 $a_t$、$s_t$ 预测 $\hat{s}_{t+1}$。在智能体与环境交互的时候，我们要把内在好奇心模块固定住。这个想法有一个问题：某些状态很难被预测并不代表它就是好的、它就是应该要被尝试的。例如，俄罗斯轮盘的结果也是没有办法预测的，这并不代表人应该每天去玩俄罗斯轮盘。所以只鼓励智能体去冒险是不够的，因为如果仅仅只有这个网络的架构，智能体只知道什么东西它无法预测。如果在某一个状态采取某一个动作，智能体无法预测接下来结果，它就会采取那个动作，但这并不代表这样的结果一定是好的。例如，可能在某个游戏里面，背景会有风吹草动、会有树叶飘动这种无关紧要的事情。也许树叶飘动这件事，是很难被预测的，对智能体来说，它在某一个状态什么都不做，就看着树叶飘动，发现树叶飘动是没有办法预测的，接下来它就会一直看树叶飘动。所以智能体仅仅有好奇心是不够的，还要让它知道，什么事情是真正重要的。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.4.png"/>
-</div>
-<div align=center>图 10.4 内在好奇心模块设计</div>
+
+![10.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.4.png)
+
+图 10.4 内在好奇心模块设计
     
 怎么让智能体知道什么事情是真正重要的呢？我们要加上另外一个模块，我们要学习一个**特征提取器（feature extractor）**。如图 10.5 所示，黄色的格子代表特征提取器，它输入一个状态，输出一个特征向量来代表这个状态，我们期待特征提取器可以把没有意义的画面，状态里面没有意义的东西过滤掉，比如风吹草动、白云的飘动以及树叶飘动。
 
@@ -4754,10 +4753,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 我们可以学习另外一个网络，即网络 2。网络 2 把向量 $\pmb{\phi}(s_t)$和$\pmb{\phi}(s_{t+1})$ 作为输入，它要预测动作$a$ 是什么，它希望这个动作$a$ 与真正的动作$a$ 越接近越好。网络 2 会输出一个动作$a_t$，它会输出，从状态$s_t$ 到状态$s_{t+1}$，要采取的动作与真正的动作越接近越好。加上网络 2 是因为要用 $\pmb{\phi}(s_t)$、$\pmb{\phi}(s_{t+1})$  预测动作。所以，我们提取出来的特征与预测动作这件事情是有关的，风吹草动等与智能体要采取的动作无关的就会被过滤掉，就不会在被提取出来的向量中被表示。
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.5.png"/>
-</div>
-<div align=center>图 10.5 好奇心模块</div>
+
+![10.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.5.png)
+
+图 10.5 好奇心模块
 
 #### 10.3 课程学习
 
@@ -4767,20 +4766,20 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 再例如，对于把蓝色的板子穿过柱子的任务，怎么让机器人一直从简单学到难呢？如图 10.6（左）所示，也许一开始，板子就已经在柱子上了。这时候，机器人只要把蓝色的板子压下去就可以了。这种情况比较简单，机器人应该很快就能学会。因为机器人只有往上与往下这两个选择，往下就得到奖励，任务就结束了，所有它也不知道学的是什么。如图 10.6（中）所示，我们把板子放高一点儿，机器人有时候会笨拙地往上拉板子，然后把板子拿出来。如果机器人可以学会压板子，拿板子也有很大的可能可以学会。假设机器人现在已经学到，只要板子接近柱子，它就可以把板子压下去。接下来，我们再让它学更一般的情况。如图 10.6（右）所示，一开始，让板子离柱子远一点儿。然后，板子放到柱子上面的时候，机器人就知道把板子压下去，这就是课程学习的概念。当然课程学习有点儿特别，它需要人去为智能体设计课程。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.6.png"/>
-</div>
-<div align=center>图 10.6 课程学习</div>
+
+![10.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.6.png)
+
+图 10.6 课程学习
     
 
 
 有一个比较通用的方法：**逆向课程生成（reverse curriculum generation）**。我们可以用一个比较通用的方法来帮智能体设计课程。如图 10.7 所示，假设我们一开始有一个状态$s_\mathrm{g}$，这是**目标状态（goal state）**，也就是最后最理想的结果。如果以板子和柱子的实验为例，目标状态就是把板子穿过柱子。如果我们以训练机械臂抓东西为例，抓到东西就称为目标状态。接下来我们根据目标状态去找其他的状态，这些其他的状态与目标状态是比较接近的。例如，在让机械臂抓东西的例子里面，机械臂可能还没有抓到东西。假设与目标状态很接近的状态称为 $s_1$。机械臂还没有抓到东西，但它与目标状态很接近，这种状态可称为$s_1$。至于什么是接近，这取决于具体情况。我们要根据任务来设计怎么从 $s_\mathrm{g}$ 采样出 $s_1$。接下来，智能体再从 $s_1$ 开始与环境交互，看它能不能够达到目标状态$s_\mathrm{g}$，在每一个状态下，智能体与环境交互的时候，都会得到一个奖励。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.7.png"/>
-</div>
-<div align=center>图 10.7 逆向课程生成</div>
+
+![10.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.7.png)
+
+图 10.7 逆向课程生成
     
 
 接下来，我们把奖励特别极端的情况去掉。奖励特别极端的情况的意思是这些情况太简单或是太难了。如果奖励很大，就代表这个情况太简单了，就不用学习了，因为智能体已经会了，它可以得到很大的奖励。如果奖励太小，就代表这个情况太难了，依照智能体现在的能力它学不会，所以就不学这个，只学一些奖励适中的情况。
@@ -4789,10 +4788,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.8.png"/>
-</div>
-<div align=center>图 10.8 逆课程学习</div>
+
+![10.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.8.png)
+
+图 10.8 逆课程学习
     
 
 
@@ -4805,26 +4804,26 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.9a.png"/>
-</div>
-<div align=center>图 10.9 分层强化学习例子</div>
+
+![10.9a](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.9a.png)
+
+图 10.9 分层强化学习例子
     
     
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.9b.png"/>
-</div>
-<div align=center>图 10.10 改变愿景</div>
+
+![10.9b](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.9b.png)
+
+图 10.10 改变愿景
     
 
 
 图 10.11 是真实游戏的例子。第一个游戏是走迷宫，蓝色的是智能体，蓝色的智能体要走到黄色的目标。第二个游戏是单摆，单摆要碰到黄色的球。愿景是什么呢？在走迷宫游戏里面，只有两个智能体，下层的智能体负责决定要怎么走，上层的智能体负责提出愿景。虽然，实际上我们可以用很多层，但这只用了两层。走迷宫的游戏中粉红色的点代表的就是愿景。上层的智能体告诉蓝色的智能体，我们现在的第一个目标是先走到某个位置。蓝色的智能体到达以后，再说新的目标是走到另一个位置。蓝色的智能体再到达以后，新的目标会在其他位置。接下来蓝色的智能体又到达这个位置，最后希望蓝色的智能体可以到达黄色的位置。单摆的例子也一样，粉红色的点代表的是上层的智能体所提出的愿景，所以这个智能体先摆到这边，接下来，新的愿景又跑到某个位置，所以它又摆到对应的位置。然后，新的愿景又跑到上面。然后又摆到上面，最后就走到黄色的位置。这就是分层强化学习。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.10.png"/>
-</div>
-<div align=center>图 10.11 走迷宫和单摆的例子</div>
+
+![10.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch10/10.10.png)
+
+图 10.11 走迷宫和单摆的例子
     
 最后，我们对分层强化学习进行总结。分层强化学习是指将一个复杂的强化学习问题分解成多个小的、简单的子问题，每个子问题都可以单独用马尔可夫决策过程来建模。这样，我们可以将智能体的策略分为高层次策略和低层次策略，高层次策略根据当前状态决定如何执行低层次策略。这样，智能体就可以解决一些非常复杂的任务。
 
@@ -4877,35 +4876,35 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 怎么让智能体学会与专家一模一样的行为呢？我们可以把它当作一个监督学习的问题，先收集很多行车记录器的数据，再收集人在具体情境下会采取什么样的行为（训练数据）。我们知道人在状态$s_1$ 会采取动作$a_1$，人在状态$s_2$ 会采取动作$a_2$，人在状态 $s_3$ 会采取动作$a_3$.......接下来，我们就学习一个网络。这个网络就是演员，输入$s_i$ 的时候，我们希望它的输出 是$a_i$。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.2.png"/>
-</div>
-<div align=center>图 11.1 自动驾驶汽车例子</div>
+
+![11.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.2.png)
+
+图 11.1 自动驾驶汽车例子
 
 行为克隆虽然非常简单，但它的问题是，如果我们只收集专家的示范，可能我们看过的观测以及状态是非常有限的。例如，如图 11.2 所示，假设我们要学习自动驾驶一辆汽车通过图中的弯道。如果是专家，它将顺着红线通过弯道。但假设智能体很笨，它开车的时候撞墙了，它永远不知道撞墙这种状况要怎么处理。因为训练数据里面从来没有撞墙相关的数据，所以它根本就不知道撞墙这种情况要怎么处理。打电玩也是一样的，让专家去玩《超级马里奥》，专家可能非常强，它从来不会跳不上水管，所以智能体根本不知道跳不上水管时要怎么处理。所以仅仅使用行为克隆是不够的，只观察专家的示范是不够的，还需要结合另一个方法：**数据集聚合（dataset aggregation，DAgger）**。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.3.png"/>
-</div>
-<div align=center>图 11.2 行为克隆的问题</div>
+
+![11.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.3.png)
+
+图 11.2 行为克隆的问题
 
 
 我们希望收集更多样的数据，而不是只收集专家所看到的观测。我们希望能够收集专家在各种极端的情况下所采取的行为。如图 11.3 所示，以自动驾驶汽车为例，一开始我们有演员 $\theta_1$，并且让其去驾驶这辆车，同时车上坐了一个专家。这个专家会不断地告诉智能体，如果在这个情境里面，我会怎么样开。所以 $\theta_1$ 自己开自己的，但是专家会不断地表达它的想法。比如，一开始的时候，专家可能说往前走。在拐弯的时候，专家可能就会说往右转。但 $\theta_1$ 是不管专家的指令的，所以它会继续撞墙。虽然专家说往右转，但是不管他怎么下指令都是没有用的，$\theta_1$ 会做自己的事情，因为我们要做的记录的是说，专家在 $\theta_1$ 看到这种观测的情况下，它会做什么样的反应。这个方法显然是有一些问题的，因为我们每开一次自动驾驶汽车就会牺牲一个专家。我们用这个方法，牺牲一个专家以后，就会知道，人类在快要撞墙的时候，会采取什么样的行为。再用这些数据训练新的演员 $\theta_2$，并反复进行这个过程，这个方法称为数据集聚合。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.4.png"/>
-</div>
-<div align=center>图 11.3 数据集聚合</div>
+
+![11.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.4.png)
+
+图 11.3 数据集聚合
 
 行为克隆还有一个问题：智能体会完全模仿专家的行为，不管专家的行为是否有道理，就算没有道理，没有什么用，就算这是专家本身的习惯，智能体也会把它记下来。如果智能体确实可以记住所有专家的行为，也许还好。因为如果专家这么做，有些行为是多余的。但是没有问题，假设智能体的行为可以完全仿造专家行为，也就算了，它就是与专家一样得好，只是做一些多余的事。但问题是智能体是一个网络，网络的容量是有限的。就算给网络训练数据，它在训练数据上得到的正确率往往也不是 100\%，它有些事情是学不起来的。这个时候，什么该学，什么不该学就变得很重要。
 
 例如，如图 11.4 所示，在学习中文的时候，老师有语音和手势，但只有语音部分是重要的，手势部分是不重要的。也许智能体只能学一件事，如果它只学到了语音，没有问题。如果它只学到了手势，这样就有问题了。所以让智能体学习什么东西是需要模仿的、什么东西是不需要模仿的，这件事情是很重要的。而单纯的行为克隆没有学习这件事情，因为智能体只是复制专家所有的行为而已，它不知道哪些行为是重要的，是对接下来有影响的，哪些行为是不重要的、是对接下来没有影响的。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.5.png"/>
-</div>
-<div align=center>图 11.4 智能体学习中文</div>
+
+![11.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.5.png)
+
+图 11.4 智能体学习中文
 
 
 行为克隆的问题还在于：我们使用行为克隆的时候，训练数据与测试数据是不匹配的。我们可以用数据集聚合的方法来缓解这个问题。在训练与测试的时候，数据分布是不一样的。因为在强化学习中，动作会影响到接下来的状态。我们先有状态$s_1$，然后采取动作$a_1$，$a_1$ 会决定接下来的状态$s_2$。所以在强化学习里有一个很重要的特征，就是我们采取的动作会影响我们接下来的状态，也就是会影响状态的分布。如果有行为克隆，我们只能观察到专家$\hat{\theta}$的一些状态-动作对$(s,a)$。
@@ -4920,20 +4919,20 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.7a.png"/>
-</div>
-<div align=center>图 11.5 强化学习的学习过程</div>
+
+![11.7a](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.7a.png)
+
+图 11.5 强化学习的学习过程
 
 
 
 但逆强化学习刚好是相反的，如图 11.6 所示，它没有奖励函数，只有一些专家的示范，但还是有环境的。逆强化学习假设现在有一些专家的示范，用 $\hat{\tau}$ 来代表专家的示范。如果是在玩电玩，每一个 $\tau$ 就是一个很会玩电玩的人玩一场游戏的记录。如果是自动驾驶汽车，就是人开自动驾驶汽车的记录。这些就是专家的示范，每一个 $\tau$ 是一个轨迹。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.7b.png"/>
-</div>
-<div align=center>图 11.6 逆强化学习的学习过程</div>
+
+![11.7b](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.7b.png)
+
+图 11.6 逆强化学习的学习过程
 
 
 
@@ -4952,19 +4951,19 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 其实我们只要把逆强化学习中的演员看成生成器，把奖励函数看成判别器，它就是 生成对抗网络。所以逆强化学习会不会收敛就等于 生成对抗网络 会不会收敛。如果我们已经实现过，就会知道逆强化学习不一定会收敛。但除非我们对 $R$ 执行一个非常严格的限制，否则如果 $R$ 是一个一般的网络，我们就会有很大的麻烦。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.8.png"/>
-</div>
-<div align=center>图 11.7 逆强化学习的框架</div>
+
+![11.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.8.png)
+
+图 11.7 逆强化学习的框架
 
 
 
 我们可以把逆强化学习与 生成对抗网络 详细地比较一下。如图 11.8 所示，在生成对抗网络 里面，我们有一系列很好的图、一个生成器和一个判别器。一开始，生成器不知道要产生什么样的图，它就会乱画。判别器的工作就是给画的图打分，专家画的图得高分，生成器画的图得低分。生成器会想办法去骗过判别器，生成器希望判别器也给它画的图打高分。整个过程与逆强化学习是一模一样的。专家画的图就是专家的示范。生成器就是 演员，生成器画很多图，演员与环境交互，产生很多轨迹。演员与环境交互的记录其实就等价于 生成对抗网络 里面的这些图。然后我们学习一个奖励函数。奖励函数就是判别器。奖励函数要给专家的示范打高分，给演员交互的结果打低分。接下来，演员会想办法，从已经学习出的奖励函数中得到高分，然后迭代地循环。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.9.png"/>
-</div>
-<div align=center>图 11.8 生成对抗网络与逆强化学习的区别</div>
+
+![11.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.9.png)
+
+图 11.8 生成对抗网络与逆强化学习的区别
 
 
 
@@ -4974,10 +4973,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 逆强化学习有一个有趣的地方：通常我们不需要太多的训练数据，训练数据往往都是个位数。因为逆强化学习只是一种示范，实际上智能体可以与环境交互多次，所以我们往往会看到只用几笔数据就可以训练出一些有趣的结果。图 11.9 所示为让自动驾驶汽车学会在停车场中安全停车的例子。这个例子的示范是这样的：蓝色是终点，自动驾驶汽车要开到蓝色终点停车。给智能体只看一行的4个示范，让它学习怎么开车，最后它就可以学出，如果它要在红色的终点位置停车，应该这样开。给智能体看不同的示范，最后它学出来的开车的风格就会不太一样。例如，图 11.9 第二行所示为不守规矩的开车方式，因为它会开到道路之外，并且还会穿过其他的车。所以智能体就会学到一些不符合交通规范的行为，例如不一定要走在道路上、可以走非道路的地方等。图 11.9 第三行所示为倒退停车，智能体也会学会说，它可以倒退。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.11.png"/>
-</div>
-<div align=center>图 11.9 自动驾驶汽车停车例子</div>
+
+![11.11](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.11.png)
+
+图 11.9 自动驾驶汽车停车例子
 
 
 我们也可以用逆强化学习训练机器人，我们可以让机器人做一些我们人类想要它做的动作。过去，如果我们要训练机器人，让它做我们想要它做的动作，其实是比较麻烦的。例如，如果我们要操控机械臂，就需要花很多精力编写程序，这样才能让机械臂做一件很简单的事情。有了逆强化学习技术，我们自身可以做示范，机器人就通过示范来学习。比如，让机器人学会摆盘子，拉着机器人的手臂去摆盘子，机器自己动。再如，让机器人学会倒水，人只教它 20 次，杯子每次放的位置不太一样。
@@ -4988,19 +4987,19 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.13.png"/>
-</div>
-<div align=center>图 11.10 第三人称视角模仿学习例子</div>
+
+![11.13](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.13.png)
+
+图 11.10 第三人称视角模仿学习例子
 
 
 
 这怎么做呢？第三人称视角模仿学习技术其实不只用到了模仿学习，它还用到了**领域对抗训练（domain-adversarial training）**。领域对抗训练也是一种 生成对抗网络 的技术。如图 11.11 所示，我们希望有一个特征提取器，有两幅不同领域（domain）的图像，通过特征提取器以后，无法分辨出图像来自哪一个领域。第一人称视角和第三人称视角模仿学习用的技术是一样的，希望学习一个特征提取器，智能体在第三人称的时候与它在第一人称的时候的视角其实是一样的，就是把最重要的东西抽出来就好了。 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.14.png"/>
-</div>
-<div align=center>图 11.11 第三人称视角模仿学习框架</div>
+
+![11.14](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.14.png)
+
+图 11.11 第三人称视角模仿学习框架
 
 
 #### 11.5 序列生成和聊天机器人
@@ -5009,10 +5008,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 如果我们单纯用最大似然（maximum likelihood）这个技术来最大化会得到似然（likelihood），这其实就是行为克隆。行为克隆就是看到一个状态，接下来预测我们会得到什么样的动作，有一个标准答案（ground truth）告诉机器什么样的动作是最好的。在做似然的时候也是一样的，给定句子已经产生的部分，接下来机器要预测写哪一个字才是最好的。所以，其实最大似然在做序列生成（sequence generation）的时候，它对应到模仿学习里面就是行为克隆。只有最大似然是不够的，我们想要用序列生成对抗网络（sequence GAN）。其实序列生成对抗网络对应逆强化学习，逆强化学习就是一种 生成对抗网络 的技术。我们把逆强化学习的技术放在句子生成、聊天机器人里面，其实就是序列生成对抗网络与它的种种变形。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.15.png"/>
-</div>
-<div align=center>图 11.12 仿学习例子</div>
+
+![11.15](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch11/11.15.png)
+
+图 11.12 仿学习例子
 
 #### 参考文献
 
@@ -5069,10 +5068,10 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 离散动作与连续动作是相对的概念，一个是可数的，一个是不可数的。 如图 12.1 所示，离散动作和连续动作有几个例子。在 *CartPole* 环境中，可以有向左推小车、向右推小车两个动作。在 *Frozen Lake* 环境中，小乌龟可以有上、下、左、右4个动作。在雅达利的 *Pong* 游戏中，游戏有 6 个按键的动作可以输出。但在实际情况中，我们经常会遇到连续动作空间的情况，也就是输出的动作是不可数的。比如：推小车推力的大小、选择下一时刻方向盘转动的具体角度、给四轴飞行器的4个螺旋桨给的电压的大小。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.1.png"/>
-</div>
-<div align=center>图 12.1 离散动作和连续动作的区别</div>
+
+![12.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.1.png)
+
+图 12.1 离散动作和连续动作的区别
 
 
 对于这些连续的动作，Q学习、深度Q网络等算法是没有办法处理的。那我们怎么输出连续的动作呢？这个时候，“万能”的神经网络又出现了。如图 12.2 所示，在离散动作的场景下，比如我们输出上、下或是停止这几个动作。有几个动作，神经网络就输出几个概率值，我们用 $\pi_\theta(a_t|s_t)$ 来表示这个随机性的策略。在连续的动作场景下，比如我们要输出机械臂弯曲的角度，我们就输出一个具体的浮点数。我们用 $\mu_{\theta}(s_t)$ 来代表这个确定性的策略。
@@ -5080,19 +5079,19 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 我们再对随机性策略与确定性策略进行解释。对随机性策略来说，输入某一个状态 $s$，采取某一个动作的可能性并不是百分之百的，而是有一个概率的（就好像抽奖一样），根据概率随机抽取一个动作。而对于确定性策略来说，它不受概率的影响。当神经网络的参数固定之后，输入同样的状态，必然输出同样的动作，这就是确定性策略。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.2.png"/>
-</div>
-<div align=center>图 12.2 使用神经网络处理连续动作与离散动作</div>
+
+![12.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.2.png)
+
+图 12.2 使用神经网络处理连续动作与离散动作
 
 
 如图 12.3 所示，要输出离散动作，我们就加一个 softmax 层来确保所有的输出是动作概率，并且所有的动作概率和为 1。要输出连续动作，我们一般可以在输出层加一层 tanh 函数。tanh 函数的作用就是把输出限制到 [$-$1,1] 。我们得到输出后，就可以根据实际动作的范围将其缩放，再输出给环境。比如神经网络输出一个浮点数 2.8，经过 tanh 函数之后，它就可以被限制在 [$-$1,1] 之间，输出 0.99。假设小车速度的范围是 [$-$2,2] ，我们就按比例从 [$-$1,1] 扩大到 [$-$2,2]，0.99 乘 2，最终输出的就是 1.98，将其作为小车的速度或者推小车的推力输出给环境。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.3.png"/>
-</div>
-<div align=center>图 12.3 使用神经网络输出离散动作与连续动作</div>
+
+![12.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.3.png)
+
+图 12.3 使用神经网络输出离散动作与连续动作
 
 
 #### 12.2 深度确定性策略梯度
@@ -5101,38 +5100,38 @@ A3C是异步优势演员-评论员算法，其中，评论员学习价值函数�
 
 深度是因为用了神经网络；确定性表示 DDPG 输出的是一个确定性的动作，可以用于有连续动作的环境；策略梯度代表的是它用到的是策略网络。REINFORCE 算法每隔一个回合就更新一次，但 DDPG 是每个步骤都会更新一次策略网络，它是一个单步更新的策略网络。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.4.png"/>
-</div>
-<div align=center>图 12.4 DDPG</div>
+
+![12.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.4.png)
+
+图 12.4 DDPG
 
 
 DDPG 是 深度Q网络的一个扩展版本，可以扩展到连续动作空间。在 DDPG 的训练中，它借鉴了 深度Q网络 的技巧：目标网络和经验回放。经验回放与 深度Q网络 是一样的，但目标网络的更新与 深度Q网络 的有点儿不一样。提出 DDPG 是为了让 深度Q网络 可以扩展到连续的动作空间，就是我们刚才提到的小车速度、角度和电压等这样的连续值。如图 12.5 所示，DDPG 在 深度Q网络 基础上加了一个策略网络来直接输出动作值，所以 DDPG 需要一边学习 Q 网络，一边学习策略网络。Q 网络的参数用 $w$ 来表示。策略网络的参数用 $\theta$ 来表示。我们称这样的结构为演员-评论员的结构。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.5.png"/>
-</div>
-<div align=center>图 12.5 从深度Q网络到DDPG</div>
+
+![12.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.5.png)
+
+图 12.5 从深度Q网络到DDPG
 
 
 通俗地解释一下演员-评论员结构。如图 12.6 所示，策略网络扮演的就是演员的角色，它负责对外展示输出，输出动作。Q 网络就是评论员，它会在每一个步骤都对演员输出的动作做一个评估，打一个分，估计演员的动作未来能有多少奖励，也就是估计演员输出的动作的 Q 值大概是多少，即 $Q_w(s,a)$。演员需要根据舞台目前的状态来做出一个动作。评论员就是评委，它需要根据舞台现在的状态和演员输出的动作对演员刚刚的表现去打一个分数 $Q_w(s,a)$。演员根据评委的打分来调整自己的策略，也就是更新演员的神经网络参数 $\theta$，争取下次可以做得更好。评论员则要根据观众的反馈，也就是环境的反馈奖励来调整自己的打分策略，也就是要更新评论员的神经网络的参数 $w$ ，评论员的最终目标是让演员的表演获得观众尽可能多的欢呼声和掌声，从而最大化未来的总收益。
 
 最开始训练的时候，这两个神经网络的参数是随机的。所以评论员最开始是随机打分的，演员也随机输出动作。但是由于有环境反馈的奖励存在，因此评论员的评分会越来越准确，所评判的演员的表现也会越来越好。既然演员是一个神经网络，是我们希望训练好的策略网络，我们就需要计算梯度来更新优化它里面的参数 $\theta$ 。简单来说，我们希望调整演员的网络参数，使得评委打分尽可能高。注意，这里的演员是不关注观众的，它只关注评委，它只迎合评委的打分 $Q_w(s,a)$。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.6.png"/>
-</div>
-<div align=center>图 12.6 演员-评论员结构通俗解释</div>
+
+![12.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.6.png)
+
+图 12.6 演员-评论员结构通俗解释
 
 深度Q网络与DDPG的联系如图 12.7 所示。深度Q网络 的最佳策略是想要学出一个很好的 Q 网络，学出这个网络之后，我们希望选取的那个动作使 Q 值最大。DDPG 的目的也是求解让 Q 值最大的那个动作。演员只是为了迎合评委的打分而已，所以优化策略网络的梯度就是要最大化这个 Q 值，所以构造的损失函数就是让 Q 取一个负号。我们写代码的时候把这个损失函数放入优化器里面，它就会自动最小化损失，也就是最大化 Q。
 
 这里要注意，除了策略网络要做优化，DDPG 还有一个 Q 网络也要优化。评论员一开始也不知道怎么评分，它也是在一步一步的学习当中，慢慢地给出准确的分数。我们优化 Q 网络的方法其实与 深度Q网络 优化 Q 网络的方法是一样的，我们用真实的奖励$r$ 和下一步的 $Q$ 即 $Q^{\prime}$ 来拟合未来的奖励 $Q\_\text{target}$。然后让 Q 网络的输出逼近 $Q\_\text{target}$。所以构造的损失函数就是直接求这两个值的均方差。构造好损失函数后，我们将其放到优化器中，让它自动最小化损失。
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.7.png"/>
-</div>
-<div align=center>图 12.7 深度Q网络与DDPG的联系</div>
+
+![12.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.7.png)
+
+图 12.7 深度Q网络与DDPG的联系
 
 
 如图 12.8 所示，我们可以把两个网络的损失函数构造出来。策略网络的损失函数是一个复合函数。我们把 $a = \mu_\theta(s)$ 代入，最终策略网络要优化的是策略网络的参数 $\theta$ 。Q 网络要优化的是 $Q_w(s,a)$ 和 $Q\_\text{target}$ 之间的一个均方差。但是 Q 网络的优化存在一个和 深度Q网络 一模一样的问题就是它后面的 $Q\_\text{target}$ 是不稳定的。此外，后面的 $Q_{\bar{w}}\left(s^{\prime}, a^{\prime}\right)$ 也是不稳定的，因为 $Q_{\bar{w}}\left(s^{\prime}, a^{\prime}\right)$ 也是一个预估的值。
@@ -5141,10 +5140,10 @@ DDPG 是 深度Q网络的一个扩展版本，可以扩展到连续动作空间�
 
 这里训练需要用到的数据就是 $s$、$a$、$r$、$s'$，我们只需要用到这4个数据。我们用回放缓冲区把这些数据存起来，然后采样进行训练。经验回放的技巧与 深度Q网络 中的是一样的。注意，因为 DDPG 使用了经验回放技巧，所以 DDPG 是一个异策略的算法。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.8.png"/>
-</div>
-<div align=center>图 12.8 目标网络和经验回放</div>
+
+![12.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.8.png)
+
+图 12.8 目标网络和经验回放
 
 
 DDPG通过异策略的方式来训练一个确定性策略。因为策略是确定的，所以如果智能体使用同策略来探索，在一开始的时候，它很可能不会尝试足够多的动作来找到有用的学习信号。为了让 DDPG 的策略更好地探索，我们在训练的时候给它们的动作加了噪声。DDPG 的原作者推荐使用时间相关的[OU 噪声](https://en.wikipedia.org/wiki/Ornstein–Uhlenbeck_process)，但最近的结果表明不相关的、均值为 0 的高斯噪声的效果非常好。由于后者更简单，因此我们更喜欢使用它。为了便于获得更高质量的训练数据，我们可以在训练过程中把噪声变小。在测试的时候，为了查看策略利用它学到的东西的表现，我们不会在动作中加噪声。
@@ -5153,10 +5152,10 @@ DDPG通过异策略的方式来训练一个确定性策略。因为策略是确�
 
 虽然 DDPG 有时表现很好，但它对于超参数和其他类型的调整方面经常很敏感。如图 12.9 所示，DDPG常见的问题是已经学习好的 Q 函数开始显著地高估 Q 值，然后导致策略被破坏，因为它利用了 Q 函数中的误差。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.9.png"/>
-</div>
-<div align=center>图 12.9 DDPG的问题</div>
+
+![12.9](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.9.png)
+
+图 12.9 DDPG的问题
 
 我们可以使用实际的 Q 值与Q网络输出的 Q 值进行对比。实际的 Q 值可以用蒙特卡洛来算。根据当前的策略采样 1000 条轨迹，得到 $G$ 后取平均值，进而得到实际的 Q 值。
 
@@ -5183,10 +5182,10 @@ $$
 
 
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.10.png"/>
-</div>
-<div align=center>图 12.10 TD3与其他算法对比</div>
+
+![12.10](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch12/12.10.png)
+
+图 12.10 TD3与其他算法对比
 
 
 TD3的作者给出了其对应[PyTorch的实现](https://github.com/sfujim/TD3/)，代码写得很棒，我们可以将其作为一个强化学习的标准库来学习。TD3以异策略的方式训练确定性策略。由于该策略是确定性的，因此如果智能体要探索策略，则一开始它可能不会尝试采取足够广泛的动作来找到有用的学习信号。为了使TD3策略更好地探索，我们在训练时在它们的动作中添加了噪声，通常是不相关的均值为0的高斯噪声。为了便于获取高质量的训练数据，我们可以在训练过程中减小噪声的大小。
@@ -5350,10 +5349,10 @@ AlphaStar是DeepMind与暴雪使用深度强化学习技术实现的计算机与
 
 AlphaStar将《星际争霸Ⅱ》的环境状态分为4部分，分别为实体（entities）信息、地图（map）信息、玩家数据（player data）信息、游戏统计（game statistics）信息，如图13.1所示。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.1.png"/>
-</div>
-<div align=center>图 13.1 环境状态的构成</div>
+
+![13.1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.1.png)
+
+图 13.1 环境状态的构成
 
 第一部分————实体信息，例如当前时刻环境中有什么建筑、兵种等，并且我们将每一个实体的属性信息使用向量表示。例如对于一个建筑，其当前时刻的向量中包含此建筑的血量、等级、位置以及冷却时间等信息。所以对于当前帧的全部实体信息，环境会给神经网络 $N$ 个长度为 $K$ 的向量，分别表示此刻智能体能够看见的 $N$ 个实体的具体信息（向量信息）。
 
@@ -5367,10 +5366,10 @@ AlphaStar将《星际争霸Ⅱ》的环境状态分为4部分，分别为实体�
 
 AlphaStar的动作信息主要分为6个部分，如图13.2所示，分别为动作类型（action type）、选中的单元（selected units）、目标（target）、执行动作的队列（queued）、是否重复（repeat）以及延时（delay），各个部分间是有关联的。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.2.png"/>
-</div>
-<div align=center>图 13.2 动作信息的构成</div>
+
+![13.2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.2.png)
+
+图 13.2 动作信息的构成
 
 第一部分————动作类型，即下一次要进行的动作的类型是移动小兵、升级建筑还是移动小窗口的位置等。
 
@@ -5388,17 +5387,17 @@ AlphaStar的动作信息主要分为6个部分，如图13.2所示，分别为动
 
 我们在13.2节说明了AlphaStar网络的输入和输出，即状态和动作，那么从状态怎么得到动作呢？这里我们先给出其网络结构的总览，如图13.3所示，后面对此详细讨论。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.3.png"/>
-</div>
-<div align=center>图 13.3 AlphaStar网络结构总览</div>
+
+![13.3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.3.png)
+
+图 13.3 AlphaStar网络结构总览
 
 ##### 13.3.1 输入部分
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.4.png"/>
-</div>
-<div align=center>图 13.4 AlphaStar网络结构输入部分</div>
+
+![13.4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.4.png)
+
+图 13.4 AlphaStar网络结构输入部分
 
 从图13.4中的红框可以看出，模型的输入部分主要有3个部分：标量特征（scalar features)，例如前面描述的玩家等级以及小窗口的位置等信息；实体（entities)，是向量，即前面所叙述的一个建筑或一个小兵的当前所有的属性信息；小地图（minimap），即图像数据。
 
@@ -5410,19 +5409,19 @@ AlphaStar的动作信息主要分为6个部分，如图13.2所示，分别为动
 
 中间过程比较简单，即通过一个深度长短期记忆网络模块融合3种当前状态下的嵌入并进行下一时刻的输出，如图13.5所示，并且将该输出分别送入价值网络（value network）、残差多层感知机（residual MLP）以及动作类型的后续的多层感知机中。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.5.png"/>
-</div>
-<div align=center>图 13.5 AlphaStar网络结构中的深度长短期记忆网络模块</div>
+
+![13.5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.5.png)
+
+图 13.5 AlphaStar网络结构中的深度长短期记忆网络模块
 
 ##### 13.3.3 输出部分
 
 正如前面介绍的，输出的动作是前后相关联的，如图13.6所示，我们按照顺序一一介绍。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.6.png"/>
-</div>
-<div align=center>图 13.6 AlphaStar网络结构输出部分</div>
+
+![13.6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.6.png)
+
+图 13.6 AlphaStar网络结构输出部分
 
 首先是动作类型：使用深度长短期记忆网络的嵌入向量作为输入，使用残差多层感知机得到动作类型的Softmax激活函数的输出结果，并将其传给下一个子模型进行嵌入。
 
@@ -5523,10 +5522,10 @@ $$
 
 ##### 13.5.1 宏观结果
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.7.png"/>
-</div>
-<div align=center>图 13.7 AlphaStar的实验结果</div>
+
+![13.7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.7.png)
+
+图 13.7 AlphaStar的实验结果
 
 图13.7（a） 为训练后的智能体与人类对战的结果（天梯图）。具体地，刚刚结束监督学习后的 AlphaStar 可以达到“钻石”级别，而训练到一半（20天）以及训练完结（40天）的 AlphaStar 可以达到“大师”级别。这也表明AlphaStar已经可以击败绝大多数的普通玩家。
 
@@ -5538,10 +5537,10 @@ $$
 
 AlphaStar的论文中也使用了消融实验，即控制变量法，来进一步分析每一个约束条件对于对战结果的影响。下面举一个特别的例子。
 
-<div align=center>
-<img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.8.png"/>
-</div>
-<div align=center>图 13.8 AlphaStar中人类对局数据使用情况</div>
+
+![13.8](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch13/13.8.png)
+
+图 13.8 AlphaStar中人类对局数据使用情况
 
 图13.8 所示为人类对局数据的使用情况。可以看出在没有人类对局数据的情况下，数值仅仅为 149 ，但是只要经过了简单的监督学习，对应的数值就可以达到936，当然使用人类初始化后的强化学习可以达到更好的效果，利用强化学习加监督学习的KL散度可以达到接近于完整的利用人类统计量 $Z$ 的效果。由此我们可以分析出，AlphaStar 中人类对局数据对于整个模型的表现是很重要的，其并没有完全像 AlphaGo 一样，存在可以不使用人类数据进行训练的情况。
 
@@ -5590,10 +5589,10 @@ LS-Imagine 通过纯视觉观测来玩 Minecraft，仿照人类玩家的做法�
 
 为了提高有模型强化学习过程中行为学习的效率，我们提出了一种新方法——LS-Imagine。该方法的核心在于**使世界模型能够高效模拟特定行为的长期影响，而无需反复进行逐步预测**。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_e6f68aa4966902c40be894bca5146eae.gif" alt="Intro" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 1：LS-Imagine 的整体框架</figcaption>
-</figure>
+
+![Intro](https://notes.sjtu.edu.cn/uploads/upload_e6f68aa4966902c40be894bca5146eae.gif)
+  图 1：LS-Imagine 的整体框架
+
 
 如 *图 1* 所示，LS-Imagine 的核心在于训练一个**长短期世界模型**（Long Short-Term World Model），在表征学习阶段融合任务特定的指导信息。经过训练后，世界模型可以执行**即时状态转换**和**跳跃式状态转换**，同时生成相应的内在奖励，从而在**短期与长期想象的联合空间**中优化策略。跳跃式状态转换使智能体能够绕过中间状态，直接在一步想象中模拟任务相关的未来状态 $s_{t+H}$，促使智能体探索可能带来有利长期回报的行为。
 
@@ -5621,10 +5620,10 @@ LS-Imgaine 包含以下的关键的算法步骤：
 
 如 *图 2* 所示，为了生成功用性图，我们在**不依赖真实成功轨迹**的情况下**模拟并评估智能体的探索过程**。 
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_a091520394b81365d574618755a4dfd5.gif" alt="Affordance" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 2：功用性图计算过程</figcaption>
-</figure>
+
+![Affordance](https://notes.sjtu.edu.cn/uploads/upload_a091520394b81365d574618755a4dfd5.gif)
+  图 2：功用性图计算过程
+
 
 具体而言，对于单帧观察图像，我们使用一个滑动边界框从左至右、从上至下遍历扫描整张观察图像。对于滑动边界框所在的每个位置，我们从原始图像开始裁剪出 16 张图像，以缩小视野来聚焦于边界框所在的区域，并调整回原始图像的大小，得到连续的 16 帧图像用于模拟智能体向边界框所示区域移动时的视觉变化。
 
@@ -5634,35 +5633,35 @@ LS-Imgaine 包含以下的关键的算法步骤：
 
 上述步骤 1 中的功用性图计算过程涉及广泛的窗口遍历，并对每个窗口位置使用预训练的视频-文本对齐模型进行计算。这种方法计算量大、时间开销高，使其难以应用于实时任务。为此，我们设计了一套基于 Swin-Unet 的多模态 U-Net 架构，并通过上述的基于虚拟探索的功用性图计算方法来标注数据作为监督信号，训练该多模态 U-Net 架构，使其可以如 *图 3* 所示在每个时间步利用视觉观察与语言指令，高效地生成功用性图。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_640edca6ff9490db215e621936cda834.png" alt="UNet" width="600">
-  <figcaption style="font-size: 14px; color: gray;">图 3：利用多模态 U-Net 高效生成功用性图</figcaption>
-</figure>
+
+![UNet](https://notes.sjtu.edu.cn/uploads/upload_640edca6ff9490db215e621936cda834.png)
+  图 3：利用多模态 U-Net 高效生成功用性图
+
 
 ##### 3. 根据功用性图计算内在奖励以及评估跳跃式状态转换的必要性
 
 如 *图 4* 所示，为了利用功用性图所提供的任务相关先验知识，我们计算功用性图与同尺寸的二维高斯矩阵逐元素相乘的均值，并将其作为功用性驱动的内在奖励（affordance-driven intrinsic reward）。该奖励能激励智能体不断靠近目标并将目标对齐在视角中心。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_683addb53cad561141585afd7c259701.png" alt="Intrinsic" width="360">
-  <figcaption style="font-size: 14px; color: gray;">图 4：功用性驱动的内在奖励计算方法</figcaption>
-</figure>
+
+![Intrinsic](https://notes.sjtu.edu.cn/uploads/upload_683addb53cad561141585afd7c259701.png)
+  图 4：功用性驱动的内在奖励计算方法
+
 
 此外，为了评估想象过程中跳跃式转换的必要性，我们引入了一个跳跃标志（jumping flag）。如 *图 5* 所示，当智能体的观察中出现远距离的任务相关目标时，会在功用性图上体现为高价值区域高度集中，这也会导致功用性图的峰度（kurtosis）显著升高。在这种情况下，智能体应采用跳跃式状态转换（也称作长期转换），以高效抵达目标区域。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_8c0cb4bbb7171d1315b62f4c8f7f1e3a.png" alt="jp_flag" width="480">
-  <figcaption style="font-size: 14px; color: gray;">图 5：跳跃式状态转换必要性评估</figcaption>
-</figure>
+
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_8c0cb4bbb7171d1315b62f4c8f7f1e3a.png)
+  图 5：跳跃式状态转换必要性评估
+
 
 ##### 4. 长短期世界模型
 
 在 LS-Imagine 中，世界模型需要能够同时支持即时状态转换（短期状态转换）和跳跃式状态转换（长期状态转换）。所以，如 *图 6 (a)* 所示，我们在状态转换模型中设计了短期和长期两个分支，短期状态转换模型将结合当前时刻的状态和动作来执行单步的即时状态转换以预测下一相邻时间步的状态；长期转换模型则模拟目标导向的跳跃式状态转换，引导智能体快速想象向目标探索。智能体可以根据当前的状态决定采用哪种类型的转换，并通过所选的转换分支预测下一状态。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_7aba677832aaeecff96e1a91a0f9932b.png" alt="jp_flag" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 6：长短期世界模型架构以及基于长短期想象的行为学习</figcaption>
-</figure>
+
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_7aba677832aaeecff96e1a91a0f9932b.png)
+  图 6：长短期世界模型架构以及基于长短期想象的行为学习
+
 
 区别于传统的世界模型架构，我们特别设计了跳跃预测器（Jump predictor）以根据当前的状态判断应该执行哪种类型的转换；同时，对于跳跃式的状态转换，我们设计了间隔预测器（Interval predictor）以估计跳转前后的状态所间隔的环境时间步数 $\hat {\Delta}_t^\prime$ 以及期间的累积折扣奖励 $\hat G_t^\prime$，它们将用于在后续的行为学习中估计长期回报。此外，我们还将功用性图 $\mathcal{M}_t$ 作为编码器（encoder）的输入，它可以为智能体提供基于目标的先验引导，以提升决策过程的有效性。
 
@@ -5672,10 +5671,10 @@ LS-Imgaine 包含以下的关键的算法步骤：
 
 如 *图 6 (b)* 所示，LS-Imagine 采用**演员-评论家（actor-critic）算法**，通过世界模型预测的潜在状态序列来学习行为。其中，演员（actor）的目标是优化策略，以最大化折扣累积奖励 $R_t$，而评论家（critic）的作用则是基于当前策略估算每个状态的折扣累积奖励。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_f97361fef42f533d4d71c44ce522febb.png" alt="jp_flag" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 7：动态选择使用长期转移模型或短期转移模型预测长短期想象序列</figcaption>
-</figure>
+
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_f97361fef42f533d4d71c44ce522febb.png)
+  图 7：动态选择使用长期转移模型或短期转移模型预测长短期想象序列
+
 
 如*图 7* 所示，从采样的观测和功用性图编码的初始状态出发，我们根据跳跃预测器预测的跳跃标志 $\hat{j}_t$ 动态选择使用长期或短期的状态转换模型，以预测后续状态。在具有**想象范围 $L$** 的长短期想象序列中，我们通过世界模型中的各类预测器预测状态对应的奖励 $\hat{r}_t$、继续标志 $\hat{c}_t$，以及相邻状态所间隔的环境时间步数 $\hat {\Delta}_t$ 以及期间的累积折扣奖励 $\hat G_t$ 等信息，并采用改进的 bootstrap $\lambda$-returns 结合长期与短期想象以计算每个状态的折扣累积奖励：
 
@@ -5692,7 +5691,7 @@ $$
 
 我们在 Minecraft 游戏环境中进行实验来测试 LS-Imagine 智能体。我们设置了如 *表 1* 所示的 5 个开放式任务来进行实验：
 
-<center><figcaption style="font-size: 14px; color: gray;">表 1：Minecraft 任务描述</figcaption></center>
+<center>表 1：Minecraft 任务描述</center>
 
 
 
@@ -5743,18 +5742,18 @@ $$
 我们将 LS-Imagine 和 VPT、STEVE-1、PTGM、Director、DreamerV3 等多种方法进行了比对，评估的指标包括**在指定步数内完成任务的成功率**以及**平均完成任务所需要的交互步数**。实验的结果如 *图 8*、*图 9* 和 *表 2* 所示。
 
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_1cabaf4f93530a8d62d654621c2b7aef.png" alt="jp_flag" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 8：各项任务上成功率的对比</figcaption>
-</figure>
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_720f53ae4b1740b1da34c270de4694bc.png" alt="jp_flag" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 9：完成各项任务所需交互步数的对比</figcaption>
-</figure>
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_1cabaf4f93530a8d62d654621c2b7aef.png)
+  图 8：各项任务上成功率的对比
 
-<center><figcaption style="font-size: 14px; color: gray;">表 2：成功率和完成任务所需交互步数的数值结果</figcaption></center>
-<div align="center">
+
+
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_720f53ae4b1740b1da34c270de4694bc.png)
+  图 9：完成各项任务所需交互步数的对比
+
+
+<center>表 2：成功率和完成任务所需交互步数的数值结果</center>
+
 <table>
   <thead>
     <tr>
@@ -5859,25 +5858,25 @@ $$
     </tr>
   </tbody>
 </table>
-</div>
+
 
 我们发现，**LS-Imagine** 在对比模型中表现显著优越，尤其是在**目标稀疏分布的任务场景**下，其优势更加明显。
 
 同时，我们在 *图 10* 中展示了基于长短期想象状态序列重建的观测图像和功用性图的可视化结果。其中第一行显示了**跳跃式状态转换前后的潜在状态，并将其解码回像素空间**，以直观呈现状态变化；第二行可视化了**由潜在状态重建的功用性图**，以更清晰地理解功用性图如何促进跳跃式状态转换，以及它们是否能够提供有效的目标导向指导；最后一行**通过透明叠加的方式将功用性图覆盖在重建的观测图像上**，从而更直观的凸显出智能体关注的区域。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_1fbb8ad05b0fc85b35061e41fb057206.gif" alt="jp_flag" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 10：长短期想象序列可视化</figcaption>
-</figure>
+
+![jp_flag](https://notes.sjtu.edu.cn/uploads/upload_1fbb8ad05b0fc85b35061e41fb057206.gif)
+  图 10：长短期想象序列可视化
+
 
 这些可视化结果表明，LS-Imagine 的长短期世界模型能够**根据当前视觉观测自适应地决定何时进行长期想象**。此外，生成的功用性图能够**有效对齐与最终目标高度相关的区域**，从而促进智能体执行更高效的策略探索。
 
 此外，鉴于我们的方法依赖功用性图来识别高价值的探索区域，从而实现长期状态跳跃，有人可能会认为，如果目标被遮挡或不可见，我们的方法将失效。为了证明**我们的功用性图生成方法并不仅仅是一个目标识别算法，并不会仅在目标可见时才高亮相关区域**，我们在 *图 11* 中展示了当目标被遮挡或不可见的情况下生成的功用性图的例子。
 
-<figure style="text-align: center;">
-  <img src="https://notes.sjtu.edu.cn/uploads/upload_2781ce68ace8424ad9350dad8c929a65.png" width="800">
-  <figcaption style="font-size: 14px; color: gray;">图 11：目标被遮挡或不可见情形下的功用性图</figcaption>
-</figure>
+
+![upload_2781ce68ace8424ad9350dad8c929a65](https://notes.sjtu.edu.cn/uploads/upload_2781ce68ace8424ad9350dad8c929a65.png)
+  图 11：目标被遮挡或不可见情形下的功用性图
+
 
 得益于 MineCLIP 模型在大量专家示范视频上的预训练，**我们的功用性图生成方法能够在即使目标完全被遮挡或不可见的情况下生成为探索提供有效指导的功用性图**。例如，如 *图 11(a)* 所示，在**寻找村庄**的任务中，尽管村庄在当前观测中不可见，功用性图依然能够提供清晰的探索方向，建议智能体向右侧的森林或左侧山坡的开阔区域进行探索。类似地，在 *图 11(b)* 所示的**挖矿任务**中，尽管矿石通常位于地下，在当前观测中被遮挡，功用性图仍然能指引智能体向右侧的山体内部或前方的地面下挖掘。这些例子能够充分证明，**即便目标被遮挡，功用性图依然可以帮助智能体有效地进行探索**。
 
@@ -5907,13 +5906,13 @@ GitHub链接：https://github.com/qiwang067/LS-Imagine
 
 最近 Genie3 很火，但大家对世界模型的概念还有些模糊，有人认为生成模型就是世界模型，但让我们回顾最早的世界模型定义，也就是 Genie1 论文“Genie: Generative Interactive Environments”中提到的定义：”生成式交互环境可以被视为世界模型的一类，它们能够在给定动作输入的条件下，实现下一帧的预测“，由此可知，生成模型≠世界模型。接下来给大家介绍下做强化学习的人眼中的世界模型。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%201.png"/> </div> <div align=center></div>
+![image 1](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%201.png)
 
 #### 为什么是世界模型？
 
 **使用世界模型可以替代环境训练，我们可以完全在模拟的“梦境”环境中训练智能体，而不需要与真实环境交互**。这种方法提供了诸多好处。例如，运行计算密集型的游戏引擎需要使用大量的计算资源来将游戏状态渲染成图像帧，或者计算与游戏不直接相关的物理内容。我们可能不想在实际环境中浪费计算资源来训练智能体，而是可以在其模拟环境中多次训练智能体。现实世界中训练智能体的成本更高，因此逐步训练的世界模型用于模拟现实可能有助于将策略转移到现实世界中。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%202.png"/> </div> <div align=center></div>
+![image 2](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%202.png)
 
 #### 世界模型是什么？
 
@@ -5921,7 +5920,7 @@ GitHub链接：https://github.com/qiwang067/LS-Imagine
 
 - **V 模型（Variational Autoencoder，VAE）**：这是智能体（agent）的视觉感知部分，用于将高维的图像帧（如来自游戏环境的2D图像）压缩成低维的 latent 表示。这个模型对于智能体从原始输入数据中学习有意义的、抽象的表示至关重要。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%203.png"/> </div> <div align=center></div>
+![image 3](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%203.png)
 
 - **M 模型（MDN-RNN）**的作用是预测未来，具体来说，M 模型根据当前时刻 $t$ 的隐向量（latent vector） $z_t$ 、隐状态（hidden state） $h_t$ 以及动作$a_t$来预测下一时刻的隐向量 $z_{t+1}$ 。它使用**混合密度网络（Mixture Density Network，MDN）**与**循环神经网络（Recurrent Neural Network，RNN）**结合的方式，输出下一个隐向量 $z$ 的概率分布。温度参数 $\tau$ 用来控制模型的不确定性。
 
@@ -5929,7 +5928,7 @@ $$
 P\left(z_{t+1} \mid a_t, z_t, h_t\right)
 $$
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%204.png"/> </div> <div align=center></div>
+![image 4](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%204.png)
 
 - **C 模型（Controller，控制器）**使用来自V模型和M模型的表示来选择合适的动作。控制器的目的是最大化期望的累积奖励。C是一个简单的单层线性模型，它将$z_t$和$h_t$直接映射到每个时间步的行动$a _t$，$ \left[z_t h_t\right] $是把 $z_t$和$h_t$拼接在一起
 
@@ -5939,11 +5938,11 @@ $$
 
 把 V、M、C 模型放一起，**整体运作的流程**是：在每个时间步$t$，原始观测输入到V，输出 $z_t $。输入到C的是隐向量$z_t $与M的隐状态$h_t $的拼接。接着，C会输出一个动作向量$a_t $用于运动控制，并且会影响环境。接着，M将当前的$z_t $和动作$a_t $作为输入，更新自身的隐状态，生成$h_{t+1} $。值得注意的是，论文中是通过随机策略跟环境进行交互收集到的预演（rollouts）来训练世界模型。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%205.png"/> </div> <div align=center></div>
+![image 5](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%205.png)
 
 按时间步展开来，世界模型的结构如下图所示。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%206.png"/> </div> <div align=center></div>
+![image 6](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%206.png)
 
 
 
@@ -5953,7 +5952,7 @@ $$
 
 也欢迎大家看我主页上世界模型相关的 paper（[https://qiwang067.github.io/](https://qiwang067.github.io/)），最后宣传下我们 NeurIPS 组织的 Workshop “**Embodied World Models for Decision Making**”（[https://embodied-world-models.github.io/](https://embodied-world-models.github.io/)）”，**Genie 3 的核心贡献者** Philip Ball 也会给 Talk，欢迎大家参加、投稿~，希望本文能对大家理解世界模型有所帮助。
 
-<div align=center> <img width="550" src="https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%207.png"/> </div> <div align=center></div>
+![image 7](https://raw.githubusercontent.com/convexwf/easy-rl/refs/heads/master/docs/img/ch16/image%207.png)
 
 ## 附录
 

@@ -23,7 +23,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
-from urllib.parse import quote
+from urllib.parse import quote, unquote, urlsplit
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -341,13 +341,60 @@ def rewrite_image_target(target: str, source: Path) -> str:
 MARKDOWN_TARGET = re.compile(
     r"(?P<prefix>!\[[^\]]*\]\()(?P<target><[^>]+>|[^)\s]+)(?P<rest>[^)]*\))"
 )
-HTML_IMAGE_SRC = re.compile(
-    r"(?P<prefix><img\b[^>]*?\bsrc=[\"'])(?P<target>[^\"']+)(?P<suffix>[\"'])",
+HTML_IMAGE_TAG = re.compile(r"<img\b[^>]*>", re.IGNORECASE)
+HTML_ATTRIBUTE = re.compile(
+    r"\b(?P<name>[a-zA-Z_:][-a-zA-Z0-9_:.]*)\s*=\s*"
+    r"(?:\"(?P<double>[^\"]*)\"|'(?P<single>[^']*)'|(?P<bare>[^\s>]+))",
     re.IGNORECASE,
 )
+ALIGN_DIV_TAG = re.compile(r"</?div\s+align\s*=\s*[\"']?center[\"']?\s*/?>", re.IGNORECASE)
+BARE_DIV_CLOSE_TAG = re.compile(r"</div\s*>", re.IGNORECASE)
+FIGURE_TAG = re.compile(r"</?figure(?:\s+[^>]*)?>", re.IGNORECASE)
+FIGCAPTION_TAG = re.compile(r"</?figcaption(?:\s+[^>]*)?>", re.IGNORECASE)
 
 
-def rewrite_assets(line: str, source: Path) -> str:
+def html_attribute(tag: str, name: str) -> str | None:
+    """Read one HTML attribute from an image tag."""
+
+    for match in HTML_ATTRIBUTE.finditer(tag):
+        if match.group("name").lower() == name.lower():
+            return next(
+                value
+                for value in (
+                    match.group("double"),
+                    match.group("single"),
+                    match.group("bare"),
+                )
+                if value is not None
+            )
+    return None
+
+
+def image_alt_text(raw_target: str) -> str:
+    """Choose useful alt text when an HTML image has no ``alt`` attribute."""
+
+    path_text, _ = split_target(raw_target)
+    if path_text.startswith(("http://", "https://")):
+        path_text = urlsplit(path_text).path
+    name = Path(unquote(path_text)).name
+    stem = Path(name).stem
+    return stem or "image"
+
+
+def html_image_to_markdown(tag: str, source: Path) -> str:
+    """Convert one HTML image tag to standard Markdown image syntax."""
+
+    raw_target = html_attribute(tag, "src")
+    if raw_target is None:
+        return tag
+    target = rewrite_image_target(raw_target, source)
+    alt = html_attribute(tag, "alt") or image_alt_text(raw_target)
+    return f"![{alt}]({target})"
+
+
+def rewrite_assets(line: str, source: Path, align_div_closes: int = 0) -> str:
+    converted_html_image = bool(HTML_IMAGE_TAG.search(line))
+
     def markdown_replacer(match: re.Match[str]) -> str:
         target = match.group("target")
         if target.startswith("<") and target.endswith(">"):
@@ -358,12 +405,20 @@ def rewrite_assets(line: str, source: Path) -> str:
         return f"{match.group('prefix')}{target}{match.group('rest')}"
 
     line = MARKDOWN_TARGET.sub(markdown_replacer, line)
-
-    def html_replacer(match: re.Match[str]) -> str:
-        target = rewrite_image_target(match.group("target"), source)
-        return f"{match.group('prefix')}{target}{match.group('suffix')}"
-
-    return HTML_IMAGE_SRC.sub(html_replacer, line)
+    line = HTML_IMAGE_TAG.sub(
+        lambda match: html_image_to_markdown(match.group(0), source),
+        line,
+    )
+    # The original chapters use HTML containers to center images and captions.
+    # Once images are Markdown, those containers would prevent some Markdown
+    # renderers from parsing them, so remove the alignment wrappers and keep
+    # the caption text.
+    line = ALIGN_DIV_TAG.sub("", line)
+    line = FIGURE_TAG.sub("", line)
+    if align_div_closes:
+        line = BARE_DIV_CLOSE_TAG.sub("", line, count=align_div_closes)
+    line = FIGCAPTION_TAG.sub("", line)
+    return line.strip() if converted_html_image else line
 
 
 def transform_source(part: DocumentPart) -> str:
@@ -375,6 +430,7 @@ def transform_source(part: DocumentPart) -> str:
     lines = text.splitlines()
     result: list[str] = []
     in_fence = False
+    align_div_depth = 0
     title_written = False
     for line in lines:
         if re.match(r"^\s*```", line):
@@ -392,7 +448,15 @@ def transform_source(part: DocumentPart) -> str:
                 result.append(f"{'#' * min(level + 2, 6)} {heading.group(3).strip()}")
             continue
 
-        result.append(line if in_fence else rewrite_assets(line, path))
+        if in_fence:
+            result.append(line)
+            continue
+
+        align_opens = len(ALIGN_DIV_TAG.findall(line))
+        align_closes = len(BARE_DIV_CLOSE_TAG.findall(line))
+        closings_to_remove = min(align_div_depth + align_opens, align_closes)
+        align_div_depth += align_opens - closings_to_remove
+        result.append(rewrite_assets(line, path, closings_to_remove))
 
     if not title_written:
         result.insert(0, f"### {part.title}")

@@ -80,7 +80,7 @@ python3 scripts/build_combined_docs.py
 python3 scripts/build_combined_docs.py --check
 ```
 
-生成脚本维护在 `scripts/build_combined_docs.py`；frontmatter 的 `published_at` 和 `updated_at` 会从 Git 提交时间自动生成。请修改章节源文件和脚本中的目录清单，不要直接编辑生成文件。
+生成脚本维护在 `scripts/build_combined_docs.py`；frontmatter 的 `published_at` 和 `updated_at` 会从 Git 提交时间自动生成，图片会转换为远程 Markdown 图片链接。请修改章节源文件和脚本中的目录清单，不要直接编辑生成文件。
 
 ## 最新版PDF下载
 
