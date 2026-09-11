@@ -71,6 +71,17 @@
 
 地址：https://datawhalechina.github.io/easy-rl/
 
+## 完整单文件教程
+
+[`easy-rl-complete.md`](easy-rl-complete.md) 是由章节源文件自动生成的连续阅读版，适合全文搜索和导出 PDF。章节更新后，在仓库根目录执行：
+
+```bash
+python3 scripts/build_combined_docs.py
+python3 scripts/build_combined_docs.py --check
+```
+
+生成脚本维护在 `scripts/build_combined_docs.py`；frontmatter 的 `published_at` 和 `updated_at` 会从 Git 提交时间自动生成。请修改章节源文件和脚本中的目录清单，不要直接编辑生成文件。
+
 ## 最新版PDF下载
 
 地址：https://github.com/datawhalechina/easy-rl/releases

@@ -1,4 +1,5 @@
 - 目录
+- [完整单文件教程](easy-rl-complete)
 - [第一章 强化学习基础](chapter1/chapter1)
 - [第一章 习题](chapter1/chapter1_questions&keywords)
 - [第二章 马尔可夫决策过程 (MDP)](chapter2/chapter2)
@@ -30,7 +31,6 @@
 - [ICLR'25 Oral 强化学习玩MineCraft](chapter14/ls-imagine)
 - [视觉强化学习论文清单（Awesome Visual RL）](chapter15/chapter15)
 - [世界模型的本质](chapter16/chapter16)
-
 
 
 
